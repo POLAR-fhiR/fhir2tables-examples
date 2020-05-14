@@ -63,13 +63,13 @@ entries.obs <- list(
 
 dir.obs <- "data/obsWithEncPat"
 
-#xmls <- fhir.get.bundle.as.xml.list.from.server( url.obs )
+xmls <- fhir.get.bundle.as.xml.list.from.server( url.obs )
 
-#save.xmls.in.directory( xmls, dir.obs )
+save.xmls.in.directory( xmls, dir.obs )
 
 #rm( xmls )
 
-xmls <- fhir.get.bundle.as.xml.list.from.dir( dir.obs )
+#xmls <- fhir.get.bundle.as.xml.list.from.dir( dir.obs )
 
 data.obs <- fhir.get.bundle.entries.as.dataframes( xmls, entries.obs )
 
