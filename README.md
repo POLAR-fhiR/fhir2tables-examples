@@ -3,8 +3,8 @@
 Vergleich zweier Ansätze zur Extraktion und Transformation von Daten aus FHIR-Bundles zu Tabellen.
 
 ## 1. Ansätze
-1. Download, Extraktion, Tranformation in R unter Nutzung des Packages xml2
-2. Download, Extraktion, Tranformation via makefile, java und XSLT
+1. Download, Extraktion, Transformation in R unter Nutzung des Packages xml2
+2. Download, Extraktion, Transformation via makefile, java und XSLT
 
 ## 2. Examples
 1. Download aller Untersuchungen mit den dazugehoerenden Patienten und Treffen  
