@@ -14,6 +14,11 @@ endpoint <- "https://vonk.fire.ly/R4/"
 #endpoint <- "http://test.fhir.org/r4/"
 #endpoint <- "https://hapi.fhir.org/baseR4/"
 
+
+####################################################################################################################
+# examples parameters
+####################################################################################################################
+
 ###
 # a fhir search request for all observations and their relating encounters, subject and patients
 ###
@@ -60,6 +65,7 @@ entries.obs <- list(
 		)
 	)
 )
+####################################################################################################################
 
 dir.obs <- "data/obsWithPatEnc"
 

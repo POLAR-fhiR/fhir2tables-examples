@@ -56,11 +56,6 @@ bind.paths <- function( path1, path2 ) paste0( sub( "/$", "", path1 ), "/", sub(
 # bind.paths( "data/", "/patients" )
 
 
-####################################################################################################################
-# examples parameters
-
-####################################################################################################################
-
 
 ###
 # some functions
@@ -116,15 +111,20 @@ fhir.get.bundle.as.xml.list.from.server <- function( address, max.attempts = 5 )
 		
 		rels.nxt  <- xml_attr( xml_find_first( links, "./relation" ), "value" ) == "next"
 		
-		if( ! any( ! is.na( rels.nxt ) & rels.nxt ) ) break
+		if( ! any( ! is.na( rels.nxt ) & rels.nxt ) ) {
+			
+			cat( "\ndownload completed\n" )
+			
+			break
+		}
 		
 		urls  <- xml_attr( xml_find_first( links, "./url" ), "value" )
 		
 		addr <- urls[ rels.nxt ][ 1 ]
 		
-		if( is.na( addr ) ) {
+		if( addr == "" ) {
 			
-			print( "no more data" )
+			cat( "\ndownload completed\n" )
 			
 			break
 		}

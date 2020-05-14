@@ -56,7 +56,7 @@ angeforderten Bundles und erstellt fuer alle Untersuchungen, Patienten und Treff
 		)
 	)
 ```
-festgellegt werden.  
+festgelegt werden.  
 Die dabei entstehenden Daten wie die Bundle Pages (.xml) und die Ergebnisdataframes werden im Ordner ./data/exampleObsWithPatEnc als RData und csv Dateien gesichert.
 ### Verwendete endpoints  
   - "https://vonk.fire.ly/R4/"  
