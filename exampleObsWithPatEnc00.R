@@ -26,37 +26,37 @@ entries.obs <- list(
 	Observation = list(
 		entry   = ".//Observation",
 		items = list(
-			OID   = ".//id/@value",
-			PID   = ".//subject/reference/@value",
-			VALUE = ".//valueQuantity/value/@value", 
-			UNIT  = ".//valueQuantity/unit/@value", 
-			TEXT  = ".//code/text/@value",
-			CODE  = ".//code/coding/code/@value",
-			DATE  = ".//effectiveDateTime/@value"
+			OID   = "id/@value",
+			PID   = "subject/reference/@value",
+			VALUE = "valueQuantity/value/@value", 
+			UNIT  = "valueQuantity/unit/@value", 
+			TEXT  = "code/text/@value",
+			CODE  = "code/coding/code/@value",
+			DATE  = "effectiveDateTime/@value"
 		)
 	),
 	Encounter = list(
 		entry = ".//Encounter",
 		items = list( 
-			EID     = ".//id/@value",
-			PAT.ID  = ".//subject/reference/@value",
-			PRT.ID  = ".//participant/individual/reference/@value",
-			START   = ".//period/start/@value",
-			END     = ".//period/end/@value",
-			SYSTEM  = ".//class/system/@value",
-			CODE    = ".//class/code/@value",
-			DISPLAY = ".//class/display/@value"
+			EID     = "id/@value",
+			PAT.ID  = "subject/reference/@value",
+			PRT.ID  = "participant/individual/reference/@value",
+			START   = "period/start/@value",
+			END     = "period/end/@value",
+			SYSTEM  = "class/system/@value",
+			CODE    = "class/code/@value",
+			DISPLAY = "class/display/@value"
 		)
 	),
 	Patient = list(
 		entry   = ".//Patient",
 		items = list( 
-			PID      = ".//id/@value", 
-			NAME.U   = ".//name/use/@value", 
-			NAME.G   = ".//name/given/@value", 
-			NAME.F   = ".//name/family/@value",
-			SEX      = ".//gender/@value", 
-			BIRTHDAY = ".//birthDate/@value" 
+			PID      = "id/@value", 
+			NAME.U   = "name/use/@value", 
+			NAME.G   = "name/given/@value", 
+			NAME.F   = "name/family/@value",
+			SEX      = "gender/@value", 
+			BIRTHDAY = "birthDate/@value" 
 		)
 	)
 )
@@ -65,7 +65,7 @@ dir.obs <- "data/obsWithPatEnc"
 
 xmls <- fhir.get.bundle.as.xml.list.from.server( url.obs )
 
-#save.xmls.in.directory( xmls, dir.obs )
+save.xmls.in.directory( xmls, dir.obs )
 
 #rm( xmls )
 
@@ -78,6 +78,13 @@ data.obs <- fhir.get.bundle.entries.as.dataframes( xmls, entries.obs )
 # data.obs$Encounter
 
 save( data.obs, file = bind.paths( dir.obs, "data.RData" ) )
+
+for( n in names( data.obs ) ) {
+	
+	d <- data.obs[[ n ]]
+	
+	write.table( d, bind.paths( dir.obs, paste0( n, ".csv" ) ), sep = ";", row.names = F )
+}
 
 # rm( data.obs )
 # 
