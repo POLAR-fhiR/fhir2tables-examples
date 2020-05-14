@@ -61,11 +61,11 @@ entries.obs <- list(
 	)
 )
 
-dir.obs <- "data/obsWithEncPat"
+dir.obs <- "data/obsWithPatEnc"
 
 xmls <- fhir.get.bundle.as.xml.list.from.server( url.obs )
 
-save.xmls.in.directory( xmls, dir.obs )
+#save.xmls.in.directory( xmls, dir.obs )
 
 #rm( xmls )
 
@@ -73,9 +73,9 @@ save.xmls.in.directory( xmls, dir.obs )
 
 data.obs <- fhir.get.bundle.entries.as.dataframes( xmls, entries.obs )
 
-data.obs$Observation
-data.obs$Patient
-data.obs$Encounter
+# data.obs$Observation
+# data.obs$Patient
+# data.obs$Encounter
 
 save( data.obs, file = bind.paths( dir.obs, "data.RData" ) )
 

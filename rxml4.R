@@ -198,7 +198,7 @@ fhir.get.page.entries.as.dataframes <- function(
 			#dbg
 			#n.e <- names( entries )[ 1 ]
 			
-			cat( "\n", n.e, "\n" )
+			cat( "\n", n.e )
 
 			e <- entries[[ n.e ]]
 			
