@@ -67,8 +67,6 @@ bind.paths <- function( path1, path2 ) paste0( sub( "/$", "", path1 ), "/", sub(
 ###
 fhir.get.bundle.page.as.xml.from.server <- function( address, max.attempts = 5 ) {
 	
-	r <- NULL
-	
 	for( n in 1 : max.attempts ) {
 		
 		cat( paste0( "\n", th( n ), " attempt to download: ", address, "\n" ) )
@@ -84,6 +82,8 @@ fhir.get.bundle.page.as.xml.from.server <- function( address, max.attempts = 5 )
 			
 			return( r )
 		}
+		
+		Sys.sleep( 10 )
 	}
 	
 	NULL

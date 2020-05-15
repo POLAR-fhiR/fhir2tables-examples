@@ -2,4 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
-data/*
+.xml
+.RData
+.csv
+
+techniquesAlternative/puRe/data/

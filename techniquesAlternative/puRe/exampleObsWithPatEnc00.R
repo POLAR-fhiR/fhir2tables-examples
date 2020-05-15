@@ -9,10 +9,10 @@ source( "rxml4.R" )
 # some server to try out
 ###
 
-endpoint <- "https://vonk.fire.ly/R4/"
+#endpoint <- "https://vonk.fire.ly/R4/"
 #endpoint <- "http://demo.oridashi.com.au:8305/"
 #endpoint <- "http://test.fhir.org/r4/"
-#endpoint <- "https://hapi.fhir.org/baseR4/"
+endpoint <- "https://hapi.fhir.org/baseR4/"
 
 
 ####################################################################################################################
@@ -67,9 +67,9 @@ entries.obs <- list(
 )
 ####################################################################################################################
 
-dir.obs <- "data/obsWithPatEnc"
-
 xmls <- fhir.get.bundle.as.xml.list.from.server( url.obs )
+
+dir.obs <- "data/obsWithPatEnc376000"
 
 save.xmls.in.directory( xmls, dir.obs )
 
@@ -89,7 +89,7 @@ for( n in names( data.obs ) ) {
 	
 	d <- data.obs[[ n ]]
 	
-	write.table( d, bind.paths( dir.obs, paste0( n, ".csv" ) ), sep = ";", row.names = F )
+	write.table( d, bind.paths( dir.obs, paste0( n, ".csv" ) ), sep = ";", row.names = F, na = "" )
 }
 
 # rm( data.obs )
