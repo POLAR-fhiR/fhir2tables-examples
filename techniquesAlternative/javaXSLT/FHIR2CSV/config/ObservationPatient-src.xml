@@ -1,6 +1,0 @@
-<table of="Observation[valueQuantity/unit/@value='Kg']">
-	<column label="PID" search="$patient/id/@value"/>
-	<column label="GENDER" search="$patient/gender/@value"/>
-	<column label="WEIGHT" search="valueQuantity[unit/@value='Kg']/value/@value"/>
-	<column label="DATE" search="substring-before(effectiveDateTime/@value,'T')"/>
-</table>

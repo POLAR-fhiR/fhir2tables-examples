@@ -1,6 +1,0 @@
-<table of="Observation">
-	<column label="PID" search="$patientId"/>
-	<column label="DIA" search="component[.//code/@value='8462-4']/valueQuantity/value/@value"/>
-	<column label="SYS" search="component[.//code/@value='8480-6']/valueQuantity/value/@value"/>
-	<ccolumn label="DATE" search="effectiveDateTime/@value"/>
-</table>

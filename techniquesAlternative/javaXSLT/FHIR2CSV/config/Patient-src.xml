@@ -1,5 +1,0 @@
-<table of="Patient[gender and birthDate]">
-	<column label="PID" search="id/@value"/>
-	<column label="GENDER" search="gender/@value"/>
-	<column label="BIRTHDATE" search="birthDate/@value"/>
-</table>
