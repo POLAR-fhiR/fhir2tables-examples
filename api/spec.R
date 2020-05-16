@@ -7,14 +7,20 @@ endpoint <-  "https://vonk.fire.ly/R4/"
 ###
 # fhir search ohne Endpunktangabe
 ###
-fhir.search <- "Observation?_include=Observation:encounter&_include=Observation:patient&_format=xml&_pretty=true&_count=1000000"
+fhir.search <- paste0(
+	"Observation?",
+	"_include=Observation:encounter&",
+	"_include=Observation:patient&",
+	"_format=xml&",
+	"_pretty=true&",
+	"_count=50" )
 
 ###
 # Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden
 # Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
 ###
 tables.design <- list(
-	Besuche = list(
+	Untersuchungen = list(
 		".//Observation",
 		list(
 			OID     = "id/@value",
