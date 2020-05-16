@@ -13,7 +13,8 @@ Das Spezifikationsskript muss 4 Elemente enthalten.
 4. Eine Funktion, die die Daten wie gewünscht filtert:
 ```filter.data```  
 
-Beispiel einer Spezifikation zum Abfragen aller vollständigen Datensätze männlicher Patienten mit deren ID, Geschlecht und Geburtsdatum:  
+Beispiel einer Spezifikation zum Abfragen aller vollständigen Datensätze aller Patienten und Aufnahmen zu allen Untersuchungen:  
+**spec.R:**
 
 ```
 ###
@@ -39,7 +40,7 @@ fhir.search <- paste0(
 # Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
 ###
 tables.design <- list(
-	Besuche = list(
+	Untersuchungen = list(
 		".//Observation",
 		list(
 			OID     = "id/@value",
@@ -111,14 +112,16 @@ Die spec.R Dateien von 4 vorbereiteten Testfällen befinden sich im Ordner tests
 .
 ├── api
 │   ├── fhir2tables.Rproj
+│   ├── result
+│   │   ├── Aufnahmen.csv
+│   │   ├── Patienten.csv
+│   │   ├── tables.RData
+│   │   └── Untersuchungen.csv
 │   ├── runTest.R
 │   └── spec.R
 ├── README.md
 └── tests
     ├── 1
-    │   ├── result
-    │   │   ├── Patient.csv
-    │   │   └── tables.RData
     │   └── spec.R
     ├── 2
     │   └── spec.R
@@ -127,9 +130,9 @@ Die spec.R Dateien von 4 vorbereiteten Testfällen befinden sich im Ordner tests
     └── 4
         └── spec.R
 ```  
-Der erste Test wurde hier durch folgenden Befehl, der im Ordner **api** ausgeführt wurde, bereits als Beispiel erzeugt:  
+Man erkennt, dass ein API-Beispiel-Test mit der abgebildeten spec.R bereits ausgeführt wurde und Resultate erzeugt hat. (Resultate nicht im Repo vorhanden)
 ```
-.../fhir2tables/api$ Rscript runTest.R -s ../tests/1/spec.R -o ../tests/1/result
+.../fhir2tables/api$ Rscript runTest.R -s spec.R -o result
 ```
 
 ### Erreichbare Endpoints  
