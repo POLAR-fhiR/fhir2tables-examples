@@ -1,19 +1,19 @@
 # Fhir2Tables
 
-## Test
+## Tests
 ### Wie erstellt man einen Test?
 Das Erstellen eines Testfalles ist im Wesentlichen durch das Schreiben einer Spezifikation in Form eines R-Skriptes erledigt.  
 Das Spezifikationsskript muss 4 Elemente enthalten.
-1. Der baseR4-Endpoint des FHIR-Servers:  
+1. Der baseR4-Endpoint des FHIR-Servers:
 ```endpoint```
-2. Die FHIR-Suchanfrage:  
+2. Die FHIR-Suchanfrage:
 ```fhir.search```
-3. Die Struktur der aus dem Bundle zu erstellenden Tabellen:  
+3. Die Struktur der aus dem Bundle zu erstellenden Tabellen:
 ```tables.design```
-4. Eine Funktion, die die Daten wie gewünscht filtert:  
+4. Eine Funktion, die die Daten wie gewünscht filtert:
 ```filter.data```  
 
-Beispiel einer Spezifikation zum Abfragen aller männlichen Patienten mit deren ID, Geschlecht und Geburtsdatum:  
+Beispiel einer Spezifikation zum Abfragen aller vollständigen Datensätze männlicher Patienten mit deren ID, Geschlecht und Geburtsdatum:  
 
 ```
 ###
@@ -71,7 +71,7 @@ und
 ```output-directory```: der Name des Verzeichnisses, in dem die Resultate gespeichert werden sollen (z.B. result).
 
 ### 4 vorbereitete Tests
-Die spec.R Dateien von 4 vorbereiteten Testfälle befinden sich im Ordner tests.  
+Die spec.R Dateien von 4 vorbereiteten Testfällen befinden sich im Ordner tests.  
 ```
 .
 ├── api

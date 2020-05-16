@@ -17,9 +17,11 @@ tables.design <- list(
 	Patient = list(
 		entry   = ".//Patient",
 		items = list( 
-			PID       = "id/@value", 
-			GENDER    = "gender/@value", 
-			BIRTHDATE = "birthDate/@value" 
+			PID         = "id/@value", 
+			GENDER      = "gender/@value", 
+			BIRTHDATE   = "birthDate/@value",
+			NAME.GIVEN  = "name/given/@value",
+			NAME.FAMILY = "name/given/@value" 
 		)
 	)
 )
