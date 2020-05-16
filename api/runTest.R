@@ -1,6 +1,6 @@
 rm( list = ls( ) )
 
-devtools::install_github( "TPeschel/hlpr4fhir", force = T )
+devtools::install_github( "TPeschel/hlpr4fhir" )
 
 library( hlpr4fhir )
 
