@@ -75,24 +75,21 @@ Die spec.R Dateien von 4 vorbereiteten Testfällen befinden sich im Ordner tests
 ```
 .
 ├── api
-│   ├── fhir2tables.Rproj
-│   ├── runExample.R
-│   ├── rxml4.R
-│   ├── spec.R
-│   └── workflow
-│       └── exampleObsWithPatEnc00.R
+│   ├── fhir2tables.Rproj
+│   ├── runTest.R
+│   └── spec.R
+├── README.md
 └── tests
-    ├── 1
-    │   ├── result
-    │   │   ├── Patient.csv
-    │   │   └── tables.RData
-    │   └── spec.R
-    ├── 2
-    │   └── spec.R
-    ├── 3
-    │   └── spec.R
-    └── 4
-        └── spec.R
+    ├── 1
+    │   ├── result
+    │   │   └── tables.RData
+    │   └── spec.R
+    ├── 2
+    │   └── spec.R
+    ├── 3
+    │   └── spec.R
+    └── 4
+        └── spec.R
 ```  
 Der erste Test wurde hier durch folgenden Befehl, der im Ordner **api** ausgeführt wurde, bereits als Beispiel erzeugt:  
 ```
