@@ -82,6 +82,7 @@ Die spec.R Dateien von 4 vorbereiteten Testfällen befinden sich im Ordner tests
 └── tests
     ├── 1
     │   ├── result
+    │   │   ├── Patient.csv
     │   │   └── tables.RData
     │   └── spec.R
     ├── 2

@@ -14,7 +14,7 @@ fhir.search <- "Observation?_include=Observation:encounter&_include=Observation:
 # Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
 ###
 tables.design <- list(
-	Besuch = list(
+	Besuche = list(
 		".//Observation",
 		list(
 			OID     = "id/@value",
@@ -26,7 +26,7 @@ tables.design <- list(
 			DATUM   = "effectiveDateTime/@value"
 		)
 	),
-	Aufnahme = list(
+	Aufnahmen = list(
 		".//Encounter",
 		list( 
 			EID           = "id/@value",
@@ -39,7 +39,7 @@ tables.design <- list(
 			DISPLAY       = "class/display/@value"
 		)
 	),
-	Patient = list(
+	Patienten = list(
 		".//Patient",
 		list( 
 			PID             = "id/@value", 
