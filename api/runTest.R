@@ -1,6 +1,8 @@
 rm( list = ls( ) )
 
-source( "rxml4.R" )
+devtools::install_github( "TPeschel/hlpr4fhir", force = T )
+
+library( hlpr4fhir )
 
 arg <- commandArgs( T )
 
@@ -13,12 +15,12 @@ if( length( out.dir ) < 1 || is.na( out.dir ) ) out.dir <- "result"
 
 source( spec.file )
 
-url    <- bind.paths( endpoint, fhir.search )
+url    <- concatenate.paths( path1 = endpoint, path2 = fhir.search )
 
-bundle <- fhir.get.bundle.as.xml.list.from.server( url )
+bundle <- download.bundle( url )
 
 # list of tables
-list.of.tables <- fhir.get.bundle.entries.as.dataframes( bundle, tables.design )
+list.of.tables <- bundle.to.dataframes( bundle, tables.design )
 
 list.of.tables <- filter.data( list.of.tables )
 
