@@ -100,7 +100,7 @@ filter.data <- function( list.of.tables ) {
 ```
 ### Wie startet man einen Test?
 Aus dem Ordner **api**, indem sich das R-Skript **runTest.R** befindet, startet man einen Test mit folgender Eingabe in die Kommandozeile:  
-```Rscript runTest.R -s specification-file -o output-directory```  
+```Rscript fhi.R -s specification-file -o output-directory```  
 Hierbei sind:  
 ```specification-file```: der Name des R-Skriptes, das den Test spezifiziert (in der Regel spec.R)  
 und  
@@ -117,7 +117,7 @@ Die spec.R Dateien von 4 vorbereiteten Testfällen befinden sich im Ordner tests
 │   │   ├── Patienten.csv
 │   │   ├── tables.RData
 │   │   └── Untersuchungen.csv
-│   ├── runTest.R
+│   ├── fhi.R
 │   └── spec.R
 ├── README.md
 └── tests
@@ -132,7 +132,7 @@ Die spec.R Dateien von 4 vorbereiteten Testfällen befinden sich im Ordner tests
 ```  
 Man erkennt, dass ein API-Beispiel-Test mit der abgebildeten spec.R bereits ausgeführt wurde und Resultate erzeugt hat. (Resultate nicht im Repo vorhanden)
 ```
-.../fhir2tables/api$ Rscript runTest.R -s spec.R -o result
+.../fhir2tables/api$ Rscript fhi.R -s spec.R -o result
 ```
 
 ### Erreichbare Endpoints  
