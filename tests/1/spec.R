@@ -15,7 +15,7 @@ fhir.search <- "Patient?_format=xml&gender=male"
 ###
 tables.design <- list(
 	Patient = list(
-		entry   = ".//Patient",
+		entry   = ".//Patient[id and gender and birthDate and name]",
 		items = list( 
 			PID         = "id/@value", 
 			GENDER      = "gender/@value", 
@@ -38,7 +38,7 @@ filter.data <- function( list.of.tables ) {
   ###
   # nur komplette Datensaetze erwuenscht
   ###
-  list.of.tables <- lapply( list.of.tables, na.omit )
+  #list.of.tables <- lapply( list.of.tables, na.omit )
 
   ###
   # gib gefilterte Daten zurueck

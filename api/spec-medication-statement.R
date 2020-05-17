@@ -1,16 +1,16 @@
 ###
 # Endpunkt des fhir r4 Servers
 ###
-endpoint <-  "https://vonk.fire.ly/R4/"
-#endpoint <- "https://hapi.fhir.org/baseR4"
+#endpoint <-  "https://vonk.fire.ly/R4/"
+endpoint <- "https://hapi.fhir.org/baseR4"
 
 ###
 # fhir search ohne Endpunktangabe
 ###
 fhir.search <- paste0(
-	"Observation?",
-	"_include=Observation:encounter&",
-	"_include=Observation:patient&",
+	"MedicationStatement?",
+	"_include=MedicationStatement:context&",
+	"_include=MedicationStatement:subject&",
 	"_format=xml&",
 	"_pretty=true&",
 	"_count=500000" )
@@ -20,16 +20,25 @@ fhir.search <- paste0(
 # Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
 ###
 tables.design <- list(
-	Untersuchungen = list(
-		".//Observation",
+	Arzneimittelbescheinigung = list(
+		".//MedicationStatement",
 		list(
-			OID     = "id/@value",
-			PID     = "subject/reference/@value",
-			WERT    = "valueQuantity/value/@value", 
-			EINHEIT = "valueQuantity/unit/@value", 
-			TEXT    = "code/text/@value",
-			CODE    = "code/coding/code/@value",
-			DATUM   = "effectiveDateTime/@value"
+			AID = "id/@value",
+			STATUS = "status/@value",
+			STATUS.BEGRUENDUNG.SYSTEM  = "statusReason/coding/system/@value",
+			STATUS.BEGRUENDUNG.CODE    = "statusReason/coding/code/@value",
+			STATUS.BEGRUENDUNG.ANZEIGE = "statusReason/coding/display/@value",
+			BEGRUENDUNG.CODE.SYSTEM  = "reasonCode/coding/system/@value",
+			BEGRUENDUNG.CODE.WERT    = "reasonCode/coding/code/@value",
+			BEGRUENDUNG.CODE.ANZEIGE = "reasonCode/coding/display/@value",
+			MEDIKATION.SYSTEM  = "medicationCodeableConcept/coding/system/@value",
+			MEDIKATION.CODE    = "medicationCodeableConcept/coding/code/@value",
+			MEDIKATION.ANZEIGE = "medicationCodeableConcept/coding/display/@value",
+			PATIENT = "subject/reference/@value",
+			BESUCH  = "context/reference/@value",
+			BEGINN  = "effectivePeriod/start/@value",
+		       	ENDE    = "effectivePeriod/end/@value",
+			DATUM   = "dateAsserted/@value"
 		)
 	),
 	Aufnahmen = list(

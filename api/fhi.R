@@ -1,8 +1,11 @@
 rm( list = ls( ) )
 
-devtools::install_github( "TPeschel/hlpr4fhir" )
+devtools::install_github( "TPeschel/fhiR" )
+###
+# https://tpeschel.github.io/fhiR/
+###
 
-library( hlpr4fhir )
+library( fhiR )
 
 arg <- commandArgs( T )
 
