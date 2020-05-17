@@ -25,8 +25,8 @@ tables.design <- list(
 		list(
 			OID     = "id/@value",
 			PID     = "subject/reference/@value",
-			WERT    = "valueQuantity/value/@value", 
-			EINHEIT = "valueQuantity/unit/@value", 
+			WERT    = "valueQuantity/value/@value",
+			EINHEIT = "valueQuantity/unit/@value",
 			TEXT    = "code/text/@value",
 			CODE    = "code/coding/code/@value",
 			DATUM   = "effectiveDateTime/@value"
@@ -34,7 +34,7 @@ tables.design <- list(
 	),
 	Aufnahmen = list(
 		".//Encounter",
-		list( 
+		list(
 			EID           = "id/@value",
 			PATIENTEN.ID  = "subject/reference/@value",
 			TEILNEHMER.ID = "participant/individual/reference/@value",
@@ -47,13 +47,13 @@ tables.design <- list(
 	),
 	Patienten = list(
 		".//Patient",
-		list( 
-			PID             = "id/@value", 
-			NAME.VERWENDUNG = "name/use/@value", 
-			VORNAME         = "name/given/@value", 
+		list(
+			PID             = "id/@value",
+			NAME.VERWENDUNG = "name/use/@value",
+			VORNAME         = "name/given/@value",
 			NACHNAME        = "name/family/@value",
-			GESCHLECHT      = "gender/@value", 
-			GEBURTSTAG      = "birthDate/@value" 
+			GESCHLECHT      = "gender/@value",
+			GEBURTSTAG      = "birthDate/@value"
 		)
 	)
 )
@@ -66,7 +66,7 @@ filter.data <- function( list.of.tables ) {
   ###
   # filter here whatever you want!
   ###
-		
+
   ###
   # nur komplette Datensaetze erwuenscht
   ###

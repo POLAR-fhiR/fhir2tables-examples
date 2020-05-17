@@ -2,7 +2,7 @@ rm( list = ls( ) )
 
 devtools::install_github( "TPeschel/fhiR" )
 ###
- https://tpeschel.github.io/fhiR/
+# https://tpeschel.github.io/fhiR/
 ###
 
 library( fhiR )
