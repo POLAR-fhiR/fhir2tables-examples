@@ -1,8 +1,8 @@
 # Fhir2Tables
 
-## Tests
-### Wie erstellt man einen Test?
-Das Erstellen eines Testfalles ist im Wesentlichen durch das Schreiben einer Spezifikation in Form eines R-Skriptes erledigt.  
+## Abfragen
+### Erstellen einer Abfrage
+Das Erstellen einer Abfrage ist im Wesentlichen durch das Schreiben einer Spezifikation in Form eines R-Skriptes erledigt.  
 Das Spezifikationsskript muss 4 Elemente enthalten.
 1. Der baseR4-Endpoint des FHIR-Servers:
 ```endpoint```
@@ -45,8 +45,8 @@ tables.design <- list(
 		list(
 			OID     = "id/@value",
 			PID     = "subject/reference/@value",
-			WERT    = "valueQuantity/value/@value", 
-			EINHEIT = "valueQuantity/unit/@value", 
+			WERT    = "valueQuantity/value/@value",
+			EINHEIT = "valueQuantity/unit/@value",
 			TEXT    = "code/text/@value",
 			CODE    = "code/coding/code/@value",
 			DATUM   = "effectiveDateTime/@value"
@@ -54,7 +54,7 @@ tables.design <- list(
 	),
 	Aufnahmen = list(
 		".//Encounter",
-		list( 
+		list(
 			EID           = "id/@value",
 			PATIENTEN.ID  = "subject/reference/@value",
 			TEILNEHMER.ID = "participant/individual/reference/@value",
@@ -67,13 +67,13 @@ tables.design <- list(
 	),
 	Patienten = list(
 		".//Patient",
-		list( 
-			PID             = "id/@value", 
-			NAME.VERWENDUNG = "name/use/@value", 
-			VORNAME         = "name/given/@value", 
+		list(
+			PID             = "id/@value",
+			NAME.VERWENDUNG = "name/use/@value",
+			VORNAME         = "name/given/@value",
 			NACHNAME        = "name/family/@value",
-			GESCHLECHT      = "gender/@value", 
-			GEBURTSTAG      = "birthDate/@value" 
+			GESCHLECHT      = "gender/@value",
+			GEBURTSTAG      = "birthDate/@value"
 		)
 	)
 )
@@ -86,7 +86,7 @@ filter.data <- function( list.of.tables ) {
   ###
   # filter here whatever you want!
   ###
-		
+
   ###
   # nur komplette Datensaetze erwuenscht
   ###
@@ -98,16 +98,16 @@ filter.data <- function( list.of.tables ) {
   list.of.tables
 }
 ```
-### Wie startet man einen Test?
-Aus dem Ordner **api**, indem sich das R-Skript **runTest.R** befindet, startet man einen Test mit folgender Eingabe in die Kommandozeile:  
+### Ausführen einer Abfrage
+Aus dem Ordner **api**, indem sich das R-Skript **runTest.R** befindet, startet man eine Abfrage mit folgender Eingabe in die Kommandozeile:  
 ```Rscript fhi.R -s specification-file -o output-directory```  
 Hierbei sind:  
-```specification-file```: der Name des R-Skriptes, das den Test spezifiziert (in der Regel spec.R)  
+```specification-file```: der Name des R-Skriptes, das die Abfrage spezifiziert (in der Regel spec.R)  
 und  
 ```output-directory```: der Name des Verzeichnisses, in dem die Resultate gespeichert werden sollen (z.B. result).
 
-### 4 vorbereitete Tests
-Die spec.R Dateien von 4 vorbereiteten Testfällen befinden sich im Ordner tests.  
+### 4 vorbereitete Testabfragen
+Die spec.R Dateien von 4 vorbereiteten Testabfragen befinden sich im Ordner tests.  
 ```
 .
 ├── api
