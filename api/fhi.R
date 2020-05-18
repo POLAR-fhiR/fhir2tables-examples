@@ -1,6 +1,7 @@
 rm( list = ls( ) )
 
-devtools::install_github( "TPeschel/fhiR" )
+devtools::install_github( "TPeschel/fhiR", quiet = T )
+
 ###
 # https://tpeschel.github.io/fhiR/
 ###
