@@ -2,7 +2,7 @@
 # Endpunkt des fhir r4 Servers
 ###
 #endpoint <-  "https://vonk.fire.ly/R4/"
-endpoint <- "https://hapi.fhir.org/baseR4"
+endpoint <- "https://hapi.fhir.org/baseR4/"
 
 ###
 # fhir search ohne Endpunktangabe
