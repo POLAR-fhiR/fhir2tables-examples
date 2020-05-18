@@ -1,27 +1,28 @@
+# Observation bloot pressure from loinc
 ###
 # Endpunkt des fhir r4 Servers
 ###
-endpoint <-  "https://vonk.fire.ly/R4/"
-#endpoint <- "https://hapi.fhir.org/baseR4"
+#endpoint <-  "https://vonk.fire.ly/R4/"#
+endpoint <- "https://hapi.fhir.org/baseR4"
 
 ###
 # fhir search ohne Endpunktangabe
 ###
-fhir.search <- "Patient?_format=xml&gender=male"
+fhir.search <- "Observation?code=http://loinc.org|85354-9&_format=xml&_count=50"
 
 ###
 # Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden
 # Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
 ###
 tables.design <- list(
-	Patient = list(
-		entry   = ".//Patient[id and gender and birthDate and name]",
+	Observation = list(
+		entry   = ".//Observation",
 		items = list( 
-			PID         = "id/@value", 
-			GENDER      = "gender/@value", 
-			BIRTHDATE   = "birthDate/@value",
-			NAME.GIVEN  = "name/given/@value",
-			NAME.FAMILY = "name/given/@value" 
+			PID   = "subject/reference/@value",
+			OID   = "id/@value",
+			DIA   = "component[.//code/@value='8462-4']/valueQuantity/value/@value", 
+			SYS   = "component[.//code/@value='8480-6']/valueQuantity/value/@value",
+			DATE  = "effectiveDateTime/@value"
 		)
 	)
 )

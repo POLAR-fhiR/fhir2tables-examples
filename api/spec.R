@@ -1,7 +1,7 @@
 ###
 # Endpunkt des fhir r4 Servers
 ###
-# endpoint <-  "https://vonk.fire.ly/R4/"
+#endpoint <-  "https://vonk.fire.ly/R4/"
 endpoint <- "https://hapi.fhir.org/baseR4"
 
 ###
@@ -13,7 +13,7 @@ fhir.search <- paste0(
 	"_include=Observation:patient&",
 	"_format=xml&",
 	"_pretty=true&",
-	"_count=500000" )
+	"_count=1000" )
 
 ###
 # Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden
@@ -78,3 +78,4 @@ filter.data <- function( list.of.tables ) {
   list.of.tables
 }
 
+cat("Achtung das richtige spec.R file wurde nicht geladen!")
