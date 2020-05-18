@@ -35,7 +35,7 @@ setwd( out.dir )
 
 for( n in names( list.of.tables ) ) {
 	
-	write.table( list.of.tables[[ n ]], file = paste0( n, ".csv" ), na = "", sep = ";", dec = ".", row.names = F )
+	write.table( list.of.tables[[ n ]], file = paste0( n, ".csv" ), na = "", sep = ";", dec = ".", row.names = F, quote=F )
 }
 
 save( list.of.tables, file = "tables.RData" )

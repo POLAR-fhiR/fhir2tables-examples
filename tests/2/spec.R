@@ -1,14 +1,13 @@
 ###
 # Endpunkt des fhir r4 Servers
 ###
-endpoint <-  "https://vonk.fire.ly/R4/"
-#endpoint <- "https://hapi.fhir.org/baseR4"
+#endpoint <-  "https://vonk.fire.ly/R4/"
+endpoint <- "https://hapi.fhir.org/baseR4"
 
 ###
 # fhir search ohne Endpunktangabe
 ###
-fhir.search <- "Patient?_format=xml&gender=male"
-
+fhir.search <- "Patient?_format=xml&_count=50"
 ###
 # Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden
 # Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
