@@ -99,7 +99,7 @@ filter.data <- function( list.of.tables ) {
 }
 ```
 ### Ausführen einer Abfrage
-Aus dem Ordner **api**, indem sich das R-Skript **runTest.R** befindet, startet man eine Abfrage mit folgender Eingabe in die Kommandozeile:  
+Aus dem Ordner **api**, indem sich das R-Skript **fhi.R** befindet, startet man eine Abfrage mit folgender Eingabe in die Kommandozeile:  
 ```Rscript fhi.R -s specification-file -o output-directory```  
 Hierbei sind:  
 ```specification-file```: der Name des R-Skriptes, das die Abfrage spezifiziert (in der Regel spec.R)  

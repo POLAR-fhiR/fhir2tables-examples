@@ -6,3 +6,4 @@
 *.RData
 *.csv
 
+.Rproj.user
