@@ -8,20 +8,19 @@ endpoint <- "https://hapi.fhir.org/baseR4"
 ###
 # fhir search ohne Endpunktangabe
 ###
-fhir.search <- "Observation?code=http://loinc.org|85354-9&_format=xml&_count=50"
+fhir.search <- "Observation?code=http://loinc.org|85354-9&_format=xml&_count=500"
 
 ###
 # Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden
 # Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
-###
 tables.design <- list(
 	Observation = list(
 		entry   = ".//Observation",
 		items = list( 
 			PID   = "subject/reference/@value",
 			OID   = "id/@value",
-			DIA   = "component[.//code/@value='8462-4']/valueQuantity/value/@value", 
-			SYS   = "component[.//code/@value='8480-6']/valueQuantity/value/@value",
+			DIA   = "component[code/coding/code/@value='8462-4']/valueQuantity/value/@value", 
+			SYS   = "component[code/coding/code/@value='8480-6']/valueQuantity/value/@value",
 			DATE  = "effectiveDateTime/@value"
 		)
 	)
@@ -30,20 +29,12 @@ tables.design <- list(
 ###
 # filtere Daten in Tabellen vor dem Export ins Ausgabeverzeichnis
 ###
-filter.data <- function( list.of.tables ) {
+filter.data <- function( lot ) {
 
-  ###
-  # filter here whatever you want!
-  ###
-		
-  ###
-  # nur komplette Datensaetze erwuenscht
-  ###
-  #list.of.tables <- lapply( list.of.tables, na.omit )
+	lot$Observation <- lot$Observation[ 
+		( ! is.na( lot$Observation$DIA ) &  80 < as.numeric( as.character( lot$Observation$DIA ) ) ) |
+		( ! is.na( lot$Observation$SYS ) & 120 < as.numeric( as.character( lot$Observation$SYS ) ) ), ]
 
-  ###
-  # gib gefilterte Daten zurueck
-  ###
-  list.of.tables
+	lot
 }
 

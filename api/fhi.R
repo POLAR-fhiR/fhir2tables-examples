@@ -21,10 +21,10 @@ source( spec.file )
 
 url    <- concatenate.paths( path1 = endpoint, path2 = fhir.search )
 
-bundle <- download.bundle( url )
+bundle <- download.bundles( url )
 
 # list of tables
-list.of.tables <- bundle.to.dataframes( bundle, tables.design )
+list.of.tables <- bundles.to.dataframes( bundle, tables.design )
 
 list.of.tables <- filter.data( list.of.tables )
 
