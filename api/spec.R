@@ -78,4 +78,4 @@ filter.data <- function( list.of.tables ) {
   list.of.tables
 }
 
-cat("Achtung das richtige spec.R file wurde nicht geladen!")
+cat( "\nAchtung das richtige spec.R file wurde nicht geladen!" )
