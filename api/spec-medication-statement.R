@@ -37,7 +37,7 @@ tables.design <- list(
 			PATIENT = "subject/reference/@value",
 			BESUCH  = "context/reference/@value",
 			BEGINN  = "effectivePeriod/start/@value",
-		       	ENDE    = "effectivePeriod/end/@value",
+			ENDE    = "effectivePeriod/end/@value",
 			DATUM   = "dateAsserted/@value"
 		)
 	),
@@ -70,20 +70,9 @@ tables.design <- list(
 ###
 # filtere Daten in Tabellen vor dem Export ins Ausgabeverzeichnis
 ###
-filter.data <- function( list.of.tables ) {
+filter.data <- function( lot ) {
 
-  ###
-  # filter here whatever you want!
-  ###
-		
-  ###
-  # nur komplette Datensaetze erwuenscht
-  ###
-  #list.of.tables <- lapply( list.of.tables, na.omit )
-
-  ###
-  # gib gefilterte Daten zurueck
-  ###
-  list.of.tables
+	#lapply( lot, na.omit )
+	lot
 }
 

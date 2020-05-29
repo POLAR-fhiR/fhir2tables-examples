@@ -134,3 +134,4 @@ filter.data <- function( lot ) {
 	lot
 }
 
+cat( "\nAchtung das richtige spec.R file wurde nicht geladen!" )

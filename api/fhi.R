@@ -19,7 +19,7 @@ if( length( out.dir ) < 1 || is.na( out.dir ) ) out.dir <- "result"
 
 source( spec.file )
 
-url    <- concatenate.paths( path1 = endpoint, path2 = fhir.search )
+url     <- concatenate.paths( path1 = endpoint, path2 = fhir.search )
 
 bundles <- download.bundles( url )
 
