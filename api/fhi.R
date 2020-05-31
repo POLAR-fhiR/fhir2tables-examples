@@ -1,6 +1,6 @@
 rm( list = ls( ) )
 
-devtools::install_github( "TPeschel/fhiR", quiet = T )
+devtools::install_github( "TPeschel/fhiR@fix_types_feature", quiet = F )
 
 ###
 # https://tpeschel.github.io/fhiR/
@@ -21,10 +21,10 @@ source( spec.file )
 
 url     <- concatenate.paths( path1 = endpoint, path2 = fhir.search )
 
-bundles <- download.bundles( url )
+bundles <- download.all.bundles( url )
 
 # list of tables
-list.of.tables <- bundles.to.dataframes( bundles, tables.design )
+list.of.tables <- all.bundles.to.data.frames( bundles, tables.design )
 
 list.of.tables <- filter.data( list.of.tables )
 
