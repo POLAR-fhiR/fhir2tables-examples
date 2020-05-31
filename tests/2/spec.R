@@ -7,7 +7,7 @@ endpoint <- "https://hapi.fhir.org/baseR4/"
 ###
 # fhir search ohne Endpunktangabe
 ###
-fhir.search <- "Patient?_format=xml&_count=50"
+fhir.search <- "Patient?_format=xml&gender=male,female&_count=500"
 ###
 # Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden
 # Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
@@ -16,9 +16,11 @@ tables.design <- list(
 	Patient = list(
 		entry   = ".//Patient",
 		items = list( 
-			PID       = "id/@value", 
-			GENDER    = "gender/@value", 
-			BIRTHDATE = "birthDate/@value" 
+			PID         = "id/@value",
+			NAME.GIVEN  = "name/given/@value",			
+			NAME.FAMILY = "name/family/@value",
+			GENDER      = "gender/@value", 
+			BIRTHDATE   = "birthDate/@value" 
 		)
 	)
 )
@@ -26,20 +28,30 @@ tables.design <- list(
 ###
 # filtere Daten in Tabellen vor dem Export ins Ausgabeverzeichnis
 ###
-filter.data <- function( list.of.tables ) {
+filter.data <- function( lot ) {
+	
+	###
+	# filter here whatever you want!
+	###
+	
+	###
+	# nur komplette Datensaetze erwuenscht
+	###
+	lot <- lapply( lot, na.omit )
+	#difftime( Sys.Date( ), Patient$BIRTHDATE, units = "days" )
+	
+	###
+	# calc age
+	###
+	lot$Patient[[ "AGE [y]" ]] <- round( as.double( difftime( Sys.Date( ), as.Date( lot$Patient$BIRTHDATE ), units = "days" ) ) / 365.25, 2 ) 
+	
+	###
+	# filter age
+	###
+	lot$Patient <- coerce.types( lot$Patient[ 0 <= lot$Patient$'AGE [y]' & lot$Patient$'AGE [y]' <= 130, ] )
 
-  ###
-  # filter here whatever you want!
-  ###
-		
-  ###
-  # nur komplette Datensaetze erwuenscht
-  ###
-  list.of.tables <- lapply( list.of.tables, na.omit )
-
-  ###
-  # gib gefilterte Daten zurueck
-  ###
-  list.of.tables
+	###
+	# gib gefilterte Daten zurueck
+	###
+	lot
 }
-

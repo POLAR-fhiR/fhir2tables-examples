@@ -3,7 +3,7 @@
 # ###
 # #endpoint <-  "https://vonk.fire.ly/R4/"
 # endpoint <- "https://hapi.fhir.org/baseR4"
-# 
+#
 # ###
 # # fhir search ohne Endpunktangabe
 # ###
@@ -14,7 +14,7 @@
 # 	"_format=xml&",
 # 	"_pretty=true&",
 # 	"_count=1000" )
-# 
+#
 # ###
 # # Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden
 # # Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
@@ -57,27 +57,27 @@
 # 		)
 # 	)
 # )
-# 
+#
 # ###
 # # filtere Daten in Tabellen vor dem Export ins Ausgabeverzeichnis
 # ###
 # filter.data <- function( list.of.tables ) {
-# 
+#
 #   ###
 #   # filter here whatever you want!
 #   ###
-# 
+#
 #   ###
 #   # nur komplette Datensaetze erwuenscht
 #   ###
 #   #list.of.tables <- lapply( list.of.tables, na.omit )
-# 
+#
 #   ###
 #   # gib gefilterte Daten zurueck
 #   ###
 #   list.of.tables
 # }
-# 
+#
 # cat("Achtung das richtige spec.R file wurde nicht geladen!")
 
 
@@ -112,10 +112,10 @@ tables.design <- list(
 # tables.design <- list(
 # 	Observation = list(
 # 		entry   = ".//Observation",
-# 		items = list( 
+# 		items = list(
 # 			PID   = "subject/reference/@value",
 # 			OID   = "id/@value",
-# 			DIA   = "component[code/coding/code/@value='8462-4']/valueQuantity/value/@value", 
+# 			DIA   = "component[code/coding/code/@value='8462-4']/valueQuantity/value/@value",
 # 			SYS   = "component[code/coding/code/@value='8480-6']/valueQuantity/value/@value",
 # 			DATE  = "effectiveDateTime/@value"
 # 		)
@@ -126,12 +126,14 @@ tables.design <- list(
 # filtere Daten in Tabellen vor dem Export ins Ausgabeverzeichnis
 ###
 filter.data <- function( lot ) {
-	
-	# lot$Observation <- lot$Observation[ 
+
+	# lot$Observation <- lot$Observation[
 	# 	( ! is.na( lot$Observation$DIA ) &  80 < as.numeric( as.character( lot$Observation$DIA ) ) ) |
 	# 	( ! is.na( lot$Observation$SYS ) & 120 < as.numeric( as.character( lot$Observation$SYS ) ) ), ]
-	
+
 	lot
 }
 
 cat( "\nAchtung das richtige spec.R file wurde nicht geladen!" )
+
+

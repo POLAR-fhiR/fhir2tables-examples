@@ -1,6 +1,9 @@
+# run once:
+# setwd( "api" )
+
 rm( list = ls( ) )
 
-devtools::install_github( "TPeschel/fhiR@fix_types_feature", quiet = F )
+devtools::install_github( "TPeschel/fhiR", quiet = T )
 
 ###
 # https://tpeschel.github.io/fhiR/
@@ -19,12 +22,12 @@ if( length( out.dir ) < 1 || is.na( out.dir ) ) out.dir <- "result"
 
 source( spec.file )
 
-url     <- concatenate.paths( path1 = endpoint, path2 = fhir.search )
+url     <- paste.paths( path1 = endpoint, path2 = fhir.search )
 
-bundles <- download.all.bundles( url )
+bundles <- fhir.search( url )
 
 # list of tables
-list.of.tables <- all.bundles.to.data.frames( bundles, tables.design )
+list.of.tables <- result2dfs( bundles, tables.design )
 
 list.of.tables <- filter.data( list.of.tables )
 

@@ -7,3 +7,6 @@
 *.csv
 
 .Rproj.user
+
+*.xml
+*.json
