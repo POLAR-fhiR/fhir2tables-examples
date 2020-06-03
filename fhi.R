@@ -9,7 +9,7 @@ devtools::install_github( "TPeschel/fhiR", quiet = T )
 # https://tpeschel.github.io/fhiR/
 ###
 
-library( fhiR )
+#library( fhiR )
 
 arg <- commandArgs( T )
 
@@ -22,12 +22,14 @@ if( length( out.dir ) < 1 || is.na( out.dir ) ) out.dir <- "result"
 
 source( spec.file )
 
-url     <- paste.paths( path1 = endpoint, path2 = fhir.search )
+url     <- fhiR::paste.paths( path1 = endpoint, path2 = fhir.search )
 
-bundles <- fhir.search( url )
+b <- xml2::read_html( url )
+
+bundles <- fhiR::fhir.search( url )
 
 # list of tables
-list.of.tables <- result2dfs( bundles, tables.design )
+list.of.tables <- fhiR::result2dfs( bundles, tables.design )
 
 list.of.tables <- filter.data( list.of.tables )
 
