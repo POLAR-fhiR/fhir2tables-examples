@@ -27,12 +27,12 @@ endpoint <-  "https://vonk.fire.ly/R4/"
 # fhir search ohne Endpunktangabe
 ###
 fhir.search <- paste0(
-	"Observation?",
-	"_include=Observation:encounter&",
-	"_include=Observation:patient&",
+	"MedicationStatement?",
+	"_include=MedicationStatement:context&",
+	"_include=MedicationStatement:subject&",
 	"_format=xml&",
 	"_pretty=true&",
-	"_count=50" )
+	"_count=500000" )
 
 
 ###
@@ -40,16 +40,25 @@ fhir.search <- paste0(
 # Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
 ###
 tables.design <- list(
-	Untersuchungen = list(
-		".//Observation",
+	Arzneimittelbescheinigung = list(
+		".//MedicationStatement",
 		list(
-			OID     = "id/@value",
-			PID     = "subject/reference/@value",
-			WERT    = "valueQuantity/value/@value",
-			EINHEIT = "valueQuantity/unit/@value",
-			TEXT    = "code/text/@value",
-			CODE    = "code/coding/code/@value",
-			DATUM   = "effectiveDateTime/@value"
+			AID = "id/@value",
+			STATUS = "status/@value",
+			STATUS.BEGRUENDUNG.SYSTEM  = "statusReason/coding/system/@value",
+			STATUS.BEGRUENDUNG.CODE    = "statusReason/coding/code/@value",
+			STATUS.BEGRUENDUNG.ANZEIGE = "statusReason/coding/display/@value",
+			BEGRUENDUNG.CODE.SYSTEM  = "reasonCode/coding/system/@value",
+			BEGRUENDUNG.CODE.WERT    = "reasonCode/coding/code/@value",
+			BEGRUENDUNG.CODE.ANZEIGE = "reasonCode/coding/display/@value",
+			MEDIKATION.SYSTEM  = "medicationCodeableConcept/coding/system/@value",
+			MEDIKATION.CODE    = "medicationCodeableConcept/coding/code/@value",
+			MEDIKATION.ANZEIGE = "medicationCodeableConcept/coding/display/@value",
+			PATIENT = "subject/reference/@value",
+			BESUCH  = "context/reference/@value",
+			BEGINN  = "effectivePeriod/start/@value",
+			ENDE    = "effectivePeriod/end/@value",
+			DATUM   = "dateAsserted/@value"
 		)
 	),
 	Aufnahmen = list(
@@ -114,32 +123,49 @@ So kann das Script auch aus den Testverzeichnissen selbst gestartet werden, soll
 $ Rscript $fhiR -s spec.R
 ```
 ### 4 vorbereitete Testabfragen
-Die spec.R Dateien von 4 vorbereiteten Testabfragen befinden sich im Ordner tests.  
+Einige spec.R Dateien von vorbereiteten Testabfragen befinden sich im Ordner tests.  
 ```
 .
-├── api
-│   ├── fhir2tables.Rproj
-│   ├── result
-│   │   ├── Aufnahmen.csv
-│   │   ├── Patienten.csv
-│   │   ├── tables.RData
-│   │   └── Untersuchungen.csv
-│   ├── fhi.R
-│   └── spec.R
+├── fhi.R
+├── fhir2tables.Rproj
+├── pilotanalyse
+│   ├── 1
+│   │   └── spec.R
+│   ├── 2
+│   │   └── spec.R
+│   ├── 3
+│   │   └── spec.R
+│   └── 4
+│       └── spec.R
 ├── README.md
+├── readme.txt
 └── tests
-    ├── 1
-    │   └── spec.R
-    ├── 2
-    │   └── spec.R
-    ├── 3
-    │   └── spec.R
-    └── 4
-        └── spec.R
+    ├── 1
+    │   └── spec.R
+    ├── 2
+    │   └── spec.R
+    ├── 3
+    │   └── spec.R
+    ├── 4
+    │   └── spec.R
+    ├── fhir-search
+    │   ├── spec-count-obs-with-pat-and-enc-age-gt-65.R
+    │   ├── spec-count-obs-with-pat-and-enc.R
+    │   ├── spec-pat-revincl.R
+    │   ├── spec.R
+    │   └── spec.R.save
+    └── MedicationStatement
+        ├── result
+        │   ├── Arzneimittelbescheinigung.csv
+        │   ├── Aufnahmen.csv
+        │   ├── Patienten.csv
+        │   └── tables.RData
+        └── spec-medication-statement.R
+
 ```  
-Man erkennt, dass ein API-Beispiel-Test mit der abgebildeten spec.R bereits ausgeführt wurde und Resultate erzeugt hat. (Resultate nicht im Repo vorhanden)
+Man erkennt, dass ein Beispiel-Test mit der abgebildeten spec-medication-statement.R im Ordner MedicationStatement bereits ausgeführt wurde und Resultate erzeugt hat. (Resultate nicht im Repo vorhanden)
 ```
-.../fhir2tables/api$ Rscript fhi.R -s spec.R -o result
+.../fhir2tables/tests/MedicationStatement/$ Rscript $fhiR -s spec-medication-statement.R
 ```
 
 
