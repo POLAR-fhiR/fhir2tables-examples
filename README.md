@@ -105,7 +105,14 @@ Hierbei sind:
 ```specification-file```: der Name des R-Skriptes, das die Abfrage spezifiziert (in der Regel spec.R)  
 und  
 ```output-directory```: der Name des Verzeichnisses, in dem die Resultate gespeichert werden sollen (z.B. result).
-
+Es empfiehlt sich, eine Variable anzuulegen, die den Pfad zu fhi.R enthaelt, um so das Skript aus den Testverzeichnissen selbst auszufuehren.
+```
+$ fhiR=$(realpath .)/fhi.R
+```
+So kann das Script auch aus den Testverzeichnissen selbst gestartet werden, soll das Ergebnisverzeichnis "result" heissen, sogar ohne Angabe eines Zielverzeichnisses:
+```
+$ Rscript $fhiR -s spec.R
+```
 ### 4 vorbereitete Testabfragen
 Die spec.R Dateien von 4 vorbereiteten Testabfragen befinden sich im Ordner tests.  
 ```
@@ -134,6 +141,7 @@ Man erkennt, dass ein API-Beispiel-Test mit der abgebildeten spec.R bereits ausg
 ```
 .../fhir2tables/api$ Rscript fhi.R -s spec.R -o result
 ```
+
 
 ### Erreichbare Endpoints  
   - "http://demo.oridashi.com.au:8305/"  
