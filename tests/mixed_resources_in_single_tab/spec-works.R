@@ -72,13 +72,10 @@ filter.data <- function( lot ) {
 				by.y = "E.PID",
 				all.x = T
 			),
-			lot$Observation,
 			by.x = "P.PID",
 			by.y = "O.PID",
 			all.x = T
 		)
-	
-	lot$ALL		
 	
 	lot		
 }
