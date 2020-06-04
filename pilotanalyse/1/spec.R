@@ -5,7 +5,8 @@
 endpoint <- "https://hapi.fhir.org/baseR4"
 
 ###
-# fhir search ohne Endpunktangabe
+# fhir search request
+# hole alle MedicationStatement mit den dazugehoerigen Patienten und Aufnahmen
 ###
 fhir.search <- "MedicationStatement/?_format=xml&_include=MedicationStatement:subject&_include=MedicationStatement:context&_count=10000000"
 
@@ -73,7 +74,7 @@ filter.data <- function( list.of.tables ) {
   ###
   # nur komplette Datensaetze erwuenscht
   ###
-  #list.of.tables <- lapply( list.of.tables, na.omit )
+  list.of.tables <- lapply( list.of.tables, na.omit )
 
   ###
   # gib gefilterte Daten zurueck
