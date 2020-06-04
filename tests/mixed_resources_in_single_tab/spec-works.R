@@ -67,12 +67,13 @@ filter.data <- function( lot ) {
 			
 			#df <- lot[[ 1 ]]
 		
+			# find all names with .xID
 			pids <- names( df )[ grep( "\\.[A-Z]ID", names( df ) ) ]
 			
 			for( p in pids ) {
 				
 				#p <- pids[[ 1 ]]
-				
+				# extract id
 				df[[ p ]] <- stringr::str_extract( df[[ p ]], "[0-9]+$" )
 			}
 			
