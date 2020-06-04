@@ -4,7 +4,7 @@
 *.Ruserdata
 *.xml
 *.RData
-*.csv
+*.csv*
 
 .Rproj.user
 
@@ -12,3 +12,4 @@
 *.json
 
 tmp
+
