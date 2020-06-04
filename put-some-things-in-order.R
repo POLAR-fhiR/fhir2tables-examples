@@ -1,6 +1,6 @@
 rm( list = ls( ) )
 
-dir.name <- "tests/1/"
+dir.name <- "tests/"
 
 all.RFiles <- fhiR::paste.paths( dir.name, dir( path = dir.name, recursive = T, include.dirs = F, pattern = ".R" ) )
 
