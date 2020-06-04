@@ -48,7 +48,7 @@ filter.data <- function( lot ) {
 	###
 	# filter age
 	###
-	lot$Patient <- coerce.types( lot$Patient[ 0 <= lot$Patient$'AGE [y]' & lot$Patient$'AGE [y]' <= 130, ] )
+	lot$Patient <- fhiR::coerce.types( lot$Patient[ 0 <= lot$Patient$'AGE [y]' & lot$Patient$'AGE [y]' <= 130, ] )
 
 	###
 	# gib gefilterte Daten zurueck
