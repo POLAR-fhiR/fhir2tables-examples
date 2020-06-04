@@ -1,6 +1,3 @@
-# run once:
-# setwd( "api" )
-
 rm( list = ls( ) )
 
 devtools::install_github( "TPeschel/fhiR", quiet = T )
@@ -23,8 +20,6 @@ if( length( out.dir ) < 1 || is.na( out.dir ) ) out.dir <- "result"
 source( spec.file )
 
 url     <- fhiR::paste.paths( path1 = endpoint, path2 = fhir.search )
-
-b <- xml2::read_html( url )
 
 bundles <- fhiR::fhir.search( url )
 
