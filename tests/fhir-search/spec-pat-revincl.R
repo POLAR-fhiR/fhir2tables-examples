@@ -5,18 +5,18 @@
 endpoint <- "https://hapi.fhir.org/baseR4/"
 
 ###
-# fhir search ohne Endpunktangabe
+# fhir.search.request ohne Endpunktangabe
 ###
-fhir.search <- "Patient?"
-fhir.search <- paste0( fhir.search, "_revinclude=*" )
-fhir.search <- paste0( fhir.search, "&_birthDate=lt1955-06-02T00:00" )
-fhir.search <- paste0( fhir.search, "and_effectiveDateTime=gt2000-01-01T00:00" )
-fhir.search <- paste0( fhir.search, "and_period:start=gt2020-01-01T00:00" )
-fhir.search <- paste0( fhir.search, "&_count=100000" )
-fhir.search <- paste0( fhir.search, "&_format=xml" )
-#fhir.search <- paste0( fhir.search, "&_summary=count" )
+fhir.search.request <- "Patient?"
+fhir.search.request <- paste0( fhir.search.request, "_revinclude=*" )
+fhir.search.request <- paste0( fhir.search.request, "&_birthDate=lt1955-06-02T00:00" )
+fhir.search.request <- paste0( fhir.search.request, "and_effectiveDateTime=gt2000-01-01T00:00" )
+fhir.search.request <- paste0( fhir.search.request, "and_period:start=gt2020-01-01T00:00" )
+fhir.search.request <- paste0( fhir.search.request, "&_count=100000" )
+fhir.search.request <- paste0( fhir.search.request, "&_format=xml" )
+#fhir.search.request <- paste0( fhir.search.request, "&_summary=count" )
 
-#fhir.search <- "Patient?_revinclude=*&_birthDate=lt1955-06-02T00:00and_effectiveDateTime=gt2010-01-01T00:00&_format=xml&_summary=count"
+#fhir.search.request <- "Patient?_revinclude=*&_birthDate=lt1955-06-02T00:00and_effectiveDateTime=gt2010-01-01T00:00&_format=xml&_summary=count"
 
 ###
 # Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden

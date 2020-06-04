@@ -5,9 +5,9 @@
 endpoint <- "https://hapi.fhir.org/baseR4"
 
 ###
-# fhir search ohne Endpunktangabe
+# fhir.search.request ohne Endpunktangabe
 ###
-fhir.search <- paste0(
+fhir.search.request <- paste0(
 	"Observation?",
 	"&code=http://loinc.org|85354-9",
 	"&_include=Observation:subject",
