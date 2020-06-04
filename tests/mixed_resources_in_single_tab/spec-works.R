@@ -26,6 +26,7 @@ tables.design <- list(
 		items = list( 
 			O.OID  = "id/@value",
 			O.PID  = "subject/reference/@value",
+			O.EID  = "encounter/reference/@value",
 			DIA    = "component[code/coding/code/@value='8462-4']/valueQuantity/value/@value", 
 			SYS    = "component[code/coding/code/@value='8480-6']/valueQuantity/value/@value",
 			DATE   = "effectiveDateTime/@value"
@@ -56,27 +57,46 @@ tables.design <- list(
 # filtere Daten in Tabellen vor dem Export ins Ausgabeverzeichnis
 ###
 filter.data <- function( lot ) {
-	
+
+	#lot <- list.of.tables
 	#lot <- lapply( lot, na.omit )
+
+	lot <- lapply(
+		lot,
+		function( df ) {
+			
+			#df <- lot[[ 1 ]]
+		
+			pids <- names( df )[ grep( "\\.[A-Z]ID", names( df ) ) ]
+			
+			for( p in pids ) {
+				
+				#p <- pids[[ 1 ]]
+				
+				df[[ p ]] <- stringr::str_extract( df[[ p ]], "[0-9]+$" )
+			}
+			
+			df
+		}
+	)
 	
-	lot$Observation$O.PID <- sub( "^.+/", "", lot$Observation$O.PID )
-	lot$Encounter$E.PID   <- sub( "^.+/", "", lot$Encounter$E.PID )
-	
-	lot$ALL <-
-		merge(
-			lot$Patient,
-			merge(
-				lot$Observation,
-				lot$Encounter,
-				by.x = "O.PID",
-				by.y = "E.PID",
-				all.x = T
+	lot$ALL <- 
+		merge( 
+			merge( 
+				lot$Observation, 
+				lot$Patient, 
+				by.x = "O.PID", 
+				by.y = "P.PID",
+				all = F
 			),
-			by.x = "P.PID",
-			by.y = "O.PID",
-			all.x = T
+			lot$Encounter, 
+			by.x = "O.EID",
+			by.y = "E.EID",
+			all = F
 		)
 	
-	lot		
+	lot$ALL$AGE <- round( as.double( as.Date( lot$ALL$DATE ) - as.Date( lot$ALL$GEBURTSTAG ) ) / 365.25, 2 )
+	
+	lot
 }
 
