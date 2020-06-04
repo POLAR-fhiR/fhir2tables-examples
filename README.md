@@ -1,9 +1,10 @@
 # Fhir2Tables
 
-## Abfragen
-### Erstellen einer Abfrage
-Das Erstellen einer Abfrage ist im Wesentlichen durch das Schreiben einer Spezifikation in Form eines R-Skriptes erledigt.  
+## Tests fuer das R-Paket fhiR
+### Erstellen eines Tests
+Das Erstellen eines Tests ist im Wesentlichen durch das Schreiben einer Spezifikation in Form eines R-Skriptes erledigt.  
 Das Spezifikationsskript muss 4 Elemente enthalten.
+
 1. Der baseR4-Endpoint des FHIR-Servers:
 ```endpoint```
 2. Die FHIR-Suchanfrage:
@@ -107,22 +108,23 @@ filter.data <- function( list.of.tables ) {
   list.of.tables
 }
 ```
-### Ausführen einer Abfrage
-Aus dem Ordner **api**, indem sich das R-Skript **fhi.R** befindet, startet man eine Abfrage mit folgender Eingabe in die Kommandozeile:  
+### Ausführen eines Tests
+Aus dem Ordner **api**, indem sich das R-Skript **fhi.R** befindet, startet man einen Test mit folgender Eingabe in die Kommandozeile:  
 ```Rscript fhi.R -s specification-file -o output-directory```  
 Hierbei sind:  
-```specification-file```: der Name des R-Skriptes, das die Abfrage spezifiziert (in der Regel spec.R)  
+  - ```specification-file```: der Name des R-Skriptes, das die Abfrage spezifiziert (in der Regel spec.R)  
 und  
-```output-directory```: der Name des Verzeichnisses, in dem die Resultate gespeichert werden sollen (z.B. result).  
-Es empfiehlt sich, eine Variable anzuulegen, die den Pfad zu fhi.R enthaelt, um so das Skript aus den Testverzeichnissen selbst auszufuehren.
+  - ```output-directory```: der Name des Verzeichnisses, in dem die Resultate gespeichert werden sollen (z.B. result).  
+
+Es empfiehlt sich, eine Variable anzulegen, die den Pfad zu fhi.R enthaelt, um so das Skript aus den Testverzeichnissen selbst ausfuehren zu koennen.
 ```
 $ fhiR=$(realpath .)/fhi.R
 ```
-So kann das Script auch aus den Testverzeichnissen selbst gestartet werden, soll das Ergebnisverzeichnis "result" heissen, sogar ohne Angabe eines Zielverzeichnisses:
+Jetzt kann das Script beispielsweise aus den Testverzeichnissen gestartet werden, soll das Ergebnisverzeichnis "result" heissen, sogar ohne Angabe eines Zielverzeichnisses:
 ```
 $ Rscript $fhiR -s spec.R
 ```
-### Test
+### Beispieltests
 Einige spec.R Dateien von vorbereiteten Testabfragen befinden sich im Ordner tests.   
 - MedicationStatement
 ```
@@ -138,5 +140,3 @@ Einige spec.R Dateien von vorbereiteten Testabfragen befinden sich im Ordner tes
   - "https://hapi.fhir.org/baseR4/"  
     - hapi hat viele aber auch viele unsinnige Daten und scheint bereits ueberlastet zu sein
 	- ab 21:30 wird es besser  
-
-## Polar Use Cases Tests ... will be continued
