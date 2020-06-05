@@ -5,9 +5,9 @@
 endpoint <- "https://hapi.fhir.org/baseR4/"
 
 ###
-# fhir search ohne Endpunktangabe
+# fhir.search.request ohne Endpunktangabe
 ###
-fhir.search <- "Observation?code=http://loinc.org|3141-9&_format=xml&_count=50"
+fhir.search.request <- "Observation?code=http://loinc.org|3141-9&_format=xml&_count=50"
 
 ###
 # Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden

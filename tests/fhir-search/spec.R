@@ -5,10 +5,10 @@
 endpoint <- "https://hapi.fhir.org/baseR4/"
 
 ###
-# fhir search ohne Endpunktangabe
+# fhir.search.request ohne Endpunktangabe
 ###
-fhir.search <- "Observation?_include=Observation:patient&_include:Observation:context"
-fhir.search <- paste0( fhir.search, "&_format=xml&_summary=count" )
+fhir.search.request <- "Observation?_include=Observation:patient&_include:Observation:context"
+fhir.search.request <- paste0( fhir.search.request, "&_format=xml&_summary=count" )
 
 ###
 # Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden

@@ -5,9 +5,9 @@
 endpoint <- "https://hapi.fhir.org/baseR4/"
 
 ###
-# fhir search ohne Endpunktangabe
+# fhir.search.request ohne Endpunktangabe
 ###
-fhir.search <- "Patient?_format=xml&gender=male,female&_count=500"
+fhir.search.request <- "Patient?_format=xml&gender=male,female&_count=500"
 ###
 # Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden
 # Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum

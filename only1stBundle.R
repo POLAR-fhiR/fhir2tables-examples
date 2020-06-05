@@ -19,7 +19,7 @@ if( length( out.dir ) < 1 || is.na( out.dir ) ) out.dir <- "result"
 
 source( spec.file )
 
-url     <- fhiR::paste.paths( path1 = endpoint, path2 = fhir.search )
+url     <- fhiR::paste.paths( path1 = endpoint, path2 = fhir.search.request )
 
 bundle <- fhiR::get.bundle( url )
 
