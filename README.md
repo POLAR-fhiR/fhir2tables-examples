@@ -27,7 +27,7 @@ endpoint <-  "https://vonk.fire.ly/R4/"
 ###
 # fhir search ohne Endpunktangabe
 ###
-fhir.search <- paste0(
+fhir.search.request <- paste0(
 	"MedicationStatement?",
 	"_include=MedicationStatement:context&",
 	"_include=MedicationStatement:subject&",
@@ -109,16 +109,19 @@ filter.data <- function( list.of.tables ) {
 }
 ```
 ### Ausführen eines Tests
-Aus dem Ordner **api**, indem sich das R-Skript **fhi.R** befindet, startet man einen Test mit folgender Eingabe in die Kommandozeile:  
-```Rscript fhi.R -s specification-file -o output-directory```  
+Aus dem Ordner **api**, indem sich die R-Skripte **only1stBundle** und **allBundles.R** befindet, startet man einen Test mit folgender Eingabe in die Kommandozeile:  
+```Rscript allBundles.R -s specification-file -o output-directory```  
+oder  
+```Rscript only1stBundles.R -s specification-file -o output-directory```   
+
 Hierbei sind:  
   - ```specification-file```: der Name des R-Skriptes, das die Abfrage spezifiziert (in der Regel spec.R)  
 und  
   - ```output-directory```: der Name des Verzeichnisses, in dem die Resultate gespeichert werden sollen (z.B. result).  
 
-Es empfiehlt sich, eine Variable anzulegen, die den Pfad zu fhi.R enthaelt, um so das Skript aus den Testverzeichnissen selbst ausfuehren zu koennen.
+Es empfiehlt sich, eine Variable anzulegen, die den Pfad zu allBundles.R enthaelt, um so das Skript aus den Testverzeichnissen selbst ausfuehren zu koennen.
 ```
-$ fhiR=$(realpath .)/fhi.R
+$ fhiR=$(realpath .)/allBundles.R
 ```
 Jetzt kann das Script beispielsweise aus den Testverzeichnissen gestartet werden, soll das Ergebnisverzeichnis "result" heissen, sogar ohne Angabe eines Zielverzeichnisses:
 ```
