@@ -21,10 +21,10 @@ source( spec.file )
 
 url     <- fhiR::paste.paths( path1 = endpoint, path2 = fhir.search.request )
 
-bundles <- fhiR::fhir.search( url )
+bundles <- fhiR::get.all.bundles( url )
 
 # list of tables
-list.of.tables <- fhiR::result2dfs( bundles, tables.design )
+list.of.tables <- fhiR::all.bundles2dfs( bundles, tables.design )
 
 list.of.tables <- filter.data( list.of.tables )
 
