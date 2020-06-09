@@ -1,6 +1,6 @@
 rm( list = ls( ) )
 
-devtools::install_github( "POLAR-fhiR/fhiR", quiet = T )
+devtools::install_github( "POLAR-fhiR/fhiR", quiet = F)
 
 ###
 # https://tpeschel.github.io/fhiR/
