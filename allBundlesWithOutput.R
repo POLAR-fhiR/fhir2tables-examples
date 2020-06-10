@@ -42,6 +42,8 @@ for( n in names( list.of.tables ) ) {
 save( list.of.tables, file = "tables.RData" )
 #save.bundles( bundles, "result" )
 save(bundles, file = "bundles.RData" )
-source("../ausgabe.R")
+if (exists("DataOutput")){
+   DataOutput()
+} 
 #saveXML(bundles, "bundleResult.txt")
 setwd( back )

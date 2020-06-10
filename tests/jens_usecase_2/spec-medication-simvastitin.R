@@ -68,7 +68,11 @@ write.table(paste0(endpoint,"/",fhir.search.request), "result/fhir.search.reques
 			col.names =FALSE, row.names =FALSE, quote=FALSE)
 
 
-
+DataOutput <-function(){
+  dat <- read.csv("Patienten.csv",header=TRUE, sep=";")
+  d <- dim(dat)	
+  cat("Anzahl der Patienten = ", d[1],"\n\n")	
+}
 
 
 
