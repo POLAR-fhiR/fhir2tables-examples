@@ -1,5 +1,11 @@
 #!/bin/bash
+#cd ../../
+#fhiR=$(pwd .)/allBundles.R
+#cd tests/jens_usecase_2
+#echo $fhiR
+#Rscript $fhiR -s spec-blutdruck.R -o resultBlutdruck
 cd ../../
 fhiR=$(pwd .)/allBundles.R
-cd tests/Jens_usecase_1
-Rscript $fhiR -s spec.R -o result
+cd tests/jens_usecase_2
+Rscript $fhiR -s spec-medication-simvastitin.R -o result
+
