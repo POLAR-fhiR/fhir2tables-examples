@@ -13,7 +13,7 @@ endpoint <- "https://hapi.fhir.org/baseR4"
 ###
 fhir.search.request <- paste0(
 	"MedicationStatement?",
-	"&code=http://snomed.info/ct|429374003",
+	"code=http://snomed.info/ct|429374003",
 	"&_include=MedicationStatement:subject",
 	"&_include=MedicationStatement:encounter",
 	"&_format=xml",
