@@ -8,11 +8,11 @@ Das Spezifikationsskript muss 4 Elemente enthalten.
 1. Der baseR4-Endpoint des FHIR-Servers:
 ```endpoint```
 2. Die FHIR-Suchanfrage:
-```fhir.search```
+```fhir.search.request```
 3. Die Struktur der aus dem Bundle zu erstellenden Tabellen:
 ```tables.design```
-4. Eine Funktion, die die Daten wie gewünscht filtert:
-```filter.data```  
+4. Eine Funktion namens **post.processing**, die die Daten wie gewünscht filtert und weiterverarbeitet:
+```post.processing( list.of.tables )```  
 
 Beispiel einer Spezifikation zum Abfragen aller vollständigen Datensätze aller Patienten und Aufnahmen zu allen Untersuchungen:  
 **spec.R:**
@@ -91,7 +91,7 @@ tables.design <- list(
 ###
 # filtere Daten in Tabellen vor dem Export ins Ausgabeverzeichnis
 ###
-filter.data <- function( list.of.tables ) {
+post.processing <- function( list.of.tables ) {
 
   ###
   # filter here whatever you want!
@@ -109,24 +109,40 @@ filter.data <- function( list.of.tables ) {
 }
 ```
 ### Ausführen eines Tests
-Aus dem Ordner **api**, indem sich die R-Skripte **only1stBundle** und **allBundles.R** befindet, startet man einen Test mit folgender Eingabe in die Kommandozeile:  
-```Rscript allBundles.R -s specification-file -o output-directory```  
-oder  
-```Rscript only1stBundles.R -s specification-file -o output-directory```   
+Aus dem Ordner **api**, indem sich das R-Skripte **fhi.R** befindet, startet man einen Test mit folgender Eingabe in die Kommandozeile:  
+```Rscript fhi.R -s specification-file -o output-directory -n number-of-bundles```  
 
 Hierbei sind:  
   - ```specification-file```: der Name des R-Skriptes, das die Abfrage spezifiziert (in der Regel spec.R)  
-und  
   - ```output-directory```: der Name des Verzeichnisses, in dem die Resultate gespeichert werden sollen (z.B. result).  
+  - ```number-of-bundles```: die maximale Anzahl an herunterzuladenden Bundles  
 
-Es empfiehlt sich, eine Variable anzulegen, die den Pfad zu allBundles.R enthaelt, um so das Skript aus den Testverzeichnissen selbst ausfuehren zu koennen.
+Es empfiehlt sich, eine Variable anzulegen, die den Pfad zur Datei **fhi.R** enthaelt, um so das Skript aus den Testverzeichnissen selbst ausfuehren zu koennen.
 ```
-$ fhiR=$(realpath .)/allBundles.R
+$ cd myGithubRepos/fhir2tables
+```  
+dort entweder
 ```
-Jetzt kann das Script beispielsweise aus den Testverzeichnissen gestartet werden, soll das Ergebnisverzeichnis "result" heissen, sogar ohne Angabe eines Zielverzeichnisses:
+$ fhiR=$(realpath .)/fhi.R
+```  
+oder  
 ```
-$ Rscript $fhiR -s spec.R
+$ fhiR=$(pwd)/fhi.R
 ```
+ausfuehren.  
+
+Jetzt kann das Script beispielsweise aus den Testverzeichnissen gestartet werden, soll das Ergebnisverzeichnis **result** heissen, das zu verwendende spec-file **spec.R** und wünscht man alle Bundles herunterzuladen, dann genügt sogar:
+```
+$ Rscript $fhiR
+```
+Andernfalls beispielsweise:  
+- spec-file:  spec-medication-test.R
+- Ausgabeverzeichnis: medications
+- bitte nur die ersten 5 Bundles downloaden! 
+```
+$ Rscript $fhiR -s spec-medication-test.R -o medications -n 5
+```
+
 ### Beispieltests
 Einige spec.R Dateien von vorbereiteten Testabfragen befinden sich im Ordner tests.   
 - MedicationStatement

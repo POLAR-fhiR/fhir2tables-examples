@@ -27,7 +27,7 @@ tables.design <- list(
 ###
 # filtere Daten in Tabellen vor dem Export ins Ausgabeverzeichnis
 ###
-filter.data <- function( lot ) {
+post.processing <- function( lot ) {
 
 	lot
 }
