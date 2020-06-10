@@ -11,111 +11,127 @@ Das Spezifikationsskript muss 4 Elemente enthalten.
 ```fhir.search.request```
 3. Die Struktur der aus dem Bundle zu erstellenden Tabellen:
 ```tables.design```
-4. Eine Funktion namens **post.processing**, die die Daten wie gewünscht filtert und weiterverarbeitet:
+4. Eine Funktion namens post.processing, die die Daten wie gewünscht filtert und weiterverarbeitet:
 ```post.processing( list.of.tables )```  
 
-Beispiel einer Spezifikation zum Abfragen aller vollständigen Datensätze aller Patienten und Aufnahmen zu allen Untersuchungen:  
+Beispiel einer Spezifikation zum Abfragen aller vollständigen Datensätze aller Patienten und Aufnahmen zu allen Blutdruckuntersuchungen mit anschliessender Alterberechnung der Patienten zum Zeitpunkt der Unteruschung/Aufnahme:  
 **spec.R:**
 
 ```
 ###
 # Endpunkt des fhir r4 Servers
 ###
-endpoint <-  "https://vonk.fire.ly/R4/"
-#endpoint <- "https://hapi.fhir.org/baseR4"
+#endpoint <-  "https://vonk.fire.ly/R4/"
+endpoint <- "https://hapi.fhir.org/baseR4"
 
 ###
-# fhir search ohne Endpunktangabe
+# fhir.search.request ohne Endpunktangabe
 ###
 fhir.search.request <- paste0(
-	"MedicationStatement?",
-	"_include=MedicationStatement:context&",
-	"_include=MedicationStatement:subject&",
-	"_format=xml&",
-	"_pretty=true&",
-	"_count=500000" )
-
+	"Observation?",
+	"&code=http://loinc.org|85354-9",
+	"&_include=Observation:subject",
+	"&_include=Observation:encounter",
+	"&_format=xml",
+	"&_pretty=true",
+	"&_count=500000" )
 
 ###
-# Welche Daten aus den Bundles sollen wie in welchen Tabellen erzeugt werden
-# 3 Tabellen Arzneimittelbescheinigung, Aufnahmen, Patient
+# Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden
+# Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
 ###
 tables.design <- list(
-	Arzneimittelbescheinigung = list(
-		".//MedicationStatement",
-		list(
-			AID = "id/@value",
-			STATUS = "status/@value",
-			STATUS.BEGRUENDUNG.SYSTEM  = "statusReason/coding/system/@value",
-			STATUS.BEGRUENDUNG.CODE    = "statusReason/coding/code/@value",
-			STATUS.BEGRUENDUNG.ANZEIGE = "statusReason/coding/display/@value",
-			BEGRUENDUNG.CODE.SYSTEM  = "reasonCode/coding/system/@value",
-			BEGRUENDUNG.CODE.WERT    = "reasonCode/coding/code/@value",
-			BEGRUENDUNG.CODE.ANZEIGE = "reasonCode/coding/display/@value",
-			MEDIKATION.SYSTEM  = "medicationCodeableConcept/coding/system/@value",
-			MEDIKATION.CODE    = "medicationCodeableConcept/coding/code/@value",
-			MEDIKATION.ANZEIGE = "medicationCodeableConcept/coding/display/@value",
-			PATIENT = "subject/reference/@value",
-			BESUCH  = "context/reference/@value",
-			BEGINN  = "effectivePeriod/start/@value",
-			ENDE    = "effectivePeriod/end/@value",
-			DATUM   = "dateAsserted/@value"
+	Observation = list(
+		entry   = ".//Observation",
+		items = list( 
+			O.OID  = "id/@value",
+			O.PID  = "subject/reference/@value",
+			O.EID  = "encounter/reference/@value",
+			DIA    = "component[code/coding/code/@value='8462-4']/valueQuantity/value/@value", 
+			SYS    = "component[code/coding/code/@value='8480-6']/valueQuantity/value/@value",
+			DATE   = "effectiveDateTime/@value"
 		)
 	),
-	Aufnahmen = list(
+	Encounter = list(
 		".//Encounter",
 		list(
-			EID           = "id/@value",
-			PATIENTEN.ID  = "subject/reference/@value",
-			TEILNEHMER.ID = "participant/individual/reference/@value",
-			BEGINN        = "period/start/@value",
-			ENDE          = "period/end/@value",
-			SYSTEM        = "class/system/@value",
-			CODE          = "class/code/@value",
-			DISPLAY       = "class/display/@value"
+			E.EID = "id/@value",
+			E.PID = "subject/reference/@value",
+			START = "period/start/@value",
+			END   = "period/end/@value"
 		)
 	),
-	Patienten = list(
+	Patient = list(
 		".//Patient",
 		list(
-			PID             = "id/@value",
-			NAME.VERWENDUNG = "name/use/@value",
-			VORNAME         = "name/given/@value",
-			NACHNAME        = "name/family/@value",
-			GESCHLECHT      = "gender/@value",
-			GEBURTSTAG      = "birthDate/@value"
+			P.PID      = "id/@value", 
+			VORNAME    = "name/given/@value", 
+			NACHNAME   = "name/family/@value",
+			GESCHLECHT = "gender/@value", 
+			GEBURTSTAG = "birthDate/@value" 
 		)
 	)
 )
 
 ###
 # filtere Daten in Tabellen vor dem Export ins Ausgabeverzeichnis
+# lot: list of tables
 ###
-post.processing <- function( list.of.tables ) {
+post.processing <- function( lot ) {
 
-  ###
-  # filter here whatever you want!
-  ###
+	lot <- lapply(
+		lot,
+		function( df ) {
+			
+			#df <- lot[[ 1 ]]
+		
+			# find all names with .xID
+			pids <- names( df )[ grep( "\\.[A-Z]ID", names( df ) ) ]
+			
+			for( p in pids ) {
+				
+				#p <- pids[[ 1 ]]
+				# extract id
+				df[[ p ]] <- stringr::str_extract( df[[ p ]], "[0-9]+$" )
+			}
+			
+			df
+		}
+	)
+	
+	lot$ALL <- 
+		merge( 
+			merge( 
+				lot$Observation, 
+				lot$Patient, 
+				by.x = "O.PID", 
+				by.y = "P.PID",
+				all = F
+			),
+			lot$Encounter, 
+			by.x = "O.EID",
+			by.y = "E.EID",
+			all = F
+		)
+	
+	lot$ALL$AGE <- round( as.double( as.Date( lot$ALL$DATE ) - as.Date( lot$ALL$GEBURTSTAG ) ) / 365.25, 2 )
+	
+	# loesche evtl noch alle nicht vollstaendigen Datansaetze
+	# lot <- lapply( lot, na.omit )
 
-  ###
-  # nur komplette Datensaetze erwuenscht
-  ###
-  list.of.tables <- lapply( list.of.tables, na.omit )
-
-  ###
-  # gib gefilterte Daten zurueck
-  ###
-  list.of.tables
+	lot
 }
+
 ```
 ### Ausführen eines Tests
 Aus dem Ordner **api**, indem sich das R-Skripte **fhi.R** befindet, startet man einen Test mit folgender Eingabe in die Kommandozeile:  
-```Rscript fhi.R -s specification-file -o output-directory -n number-of-bundles```  
+```Rscript fhi.R -s specification-file -o output-directory -n number-of-bundles -S separator```  
 
 Hierbei sind:  
   - ```specification-file```: der Name des R-Skriptes, das die Abfrage spezifiziert (in der Regel spec.R)  
   - ```output-directory```: der Name des Verzeichnisses, in dem die Resultate gespeichert werden sollen (z.B. result).  
   - ```number-of-bundles```: die maximale Anzahl an herunterzuladenden Bundles  
+  - ```separator```: a separator string for multiple entries in a resource  
 
 Es empfiehlt sich, eine Variable anzulegen, die den Pfad zur Datei **fhi.R** enthaelt, um so das Skript aus den Testverzeichnissen selbst ausfuehren zu koennen.
 ```
@@ -136,11 +152,12 @@ Jetzt kann das Script beispielsweise aus den Testverzeichnissen gestartet werden
 $ Rscript $fhiR
 ```
 Andernfalls beispielsweise:  
-- spec-file:  spec-medication-test.R
-- Ausgabeverzeichnis: medications
-- bitte nur die ersten 5 Bundles downloaden! 
+- das spec-file soll spec-medication-test.R heissen
+- das Ausgabeverzeichnis soll 'medications' heissen
+- bitte nur die ersten 5 Bundles downloaden!
+- als Separator fuer Mehrfacheintraege ' › '
 ```
-$ Rscript $fhiR -s spec-medication-test.R -o medications -n 5
+$ Rscript $fhiR -s spec-medication-test.R -o medications -n 5 -S ' › '
 ```
 
 ### Beispieltests
