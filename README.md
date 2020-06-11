@@ -43,11 +43,11 @@ fhir.search.request <- paste0(
 tables.design <- list(
 	Observation = list(
 		entry   = ".//Observation",
-		items = list( 
+		items = list(
 			O.OID  = "id/@value",
 			O.PID  = "subject/reference/@value",
 			O.EID  = "encounter/reference/@value",
-			DIA    = "component[code/coding/code/@value='8462-4']/valueQuantity/value/@value", 
+			DIA    = "component[code/coding/code/@value='8462-4']/valueQuantity/value/@value",
 			SYS    = "component[code/coding/code/@value='8480-6']/valueQuantity/value/@value",
 			DATE   = "effectiveDateTime/@value"
 		)
@@ -64,11 +64,11 @@ tables.design <- list(
 	Patient = list(
 		".//Patient",
 		list(
-			P.PID      = "id/@value", 
-			VORNAME    = "name/given/@value", 
+			P.PID      = "id/@value",
+			VORNAME    = "name/given/@value",
 			NACHNAME   = "name/family/@value",
-			GESCHLECHT = "gender/@value", 
-			GEBURTSTAG = "birthDate/@value" 
+			GESCHLECHT = "gender/@value",
+			GEBURTSTAG = "birthDate/@value"
 		)
 	)
 )
@@ -82,40 +82,40 @@ post.processing <- function( lot ) {
 	lot <- lapply(
 		lot,
 		function( df ) {
-			
+
 			#df <- lot[[ 1 ]]
-		
+
 			# find all names with .xID
 			pids <- names( df )[ grep( "\\.[A-Z]ID", names( df ) ) ]
-			
+
 			for( p in pids ) {
-				
+
 				#p <- pids[[ 1 ]]
 				# extract id
 				df[[ p ]] <- stringr::str_extract( df[[ p ]], "[0-9]+$" )
 			}
-			
+
 			df
 		}
 	)
-	
-	lot$ALL <- 
-		merge( 
-			merge( 
-				lot$Observation, 
-				lot$Patient, 
-				by.x = "O.PID", 
+
+	lot$ALL <-
+		merge(
+			merge(
+				lot$Observation,
+				lot$Patient,
+				by.x = "O.PID",
 				by.y = "P.PID",
 				all = F
 			),
-			lot$Encounter, 
+			lot$Encounter,
 			by.x = "O.EID",
 			by.y = "E.EID",
 			all = F
 		)
-	
+
 	lot$ALL$AGE <- round( as.double( as.Date( lot$ALL$DATE ) - as.Date( lot$ALL$GEBURTSTAG ) ) / 365.25, 2 )
-	
+
 	# loesche evtl noch alle nicht vollstaendigen Datansaetze
 	# lot <- lapply( lot, na.omit )
 
@@ -168,9 +168,9 @@ Einige spec.R Dateien von vorbereiteten Testabfragen befinden sich im Ordner tes
 ```
 
 
-### Erreichbare Endpoints  
+### Erreichbare FHIR Server Endpoints  
   - "http://demo.oridashi.com.au:8305/"  
-  - "http://test.fhir.org/r4/"  
+  - "https://try.smilecdr.com:8000/"  
   - "https://vonk.fire.ly/R4/"  
     - vonk scheint die besten Daten zu haben, doch nur wenige  
   - "https://hapi.fhir.org/baseR4/"  
