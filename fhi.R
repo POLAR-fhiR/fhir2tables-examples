@@ -15,6 +15,7 @@ cat( "--------------------------------------------------------------------------
 
 #devtools::install_github( "POLAR-fhiR/fhiR", ref = "f4d1fa9a0eed5b8e1b4690d37de6acb77cca6037", quiet = T, force = F )
 cat( "   - 0 download fhiR package if required...\n" )
+
 devtools::install_github( "POLAR-fhiR/fhiR", quiet = T )
 
 ###
@@ -35,6 +36,8 @@ if( length( spec.file ) < 1 || is.na( spec.file ) ) spec.file <- "spec.R"
 if( length( out.dir ) < 1 || is.na( out.dir ) ) out.dir <- "result"
 
 if( length( max.bundles ) < 1 || is.na( max.bundles ) ) max.bundles <- Inf
+
+if( length( separator ) < 1 || is.na( separator ) ) separator <- " › "
 
 cat( "   - 1 load spec-file...\n" )
 
