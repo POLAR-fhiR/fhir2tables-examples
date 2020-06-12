@@ -36,6 +36,8 @@ if( length( out.dir ) < 1 || is.na( out.dir ) ) out.dir <- "result"
 
 if( length( max.bundles ) < 1 || is.na( max.bundles ) ) max.bundles <- Inf
 
+if( length( separator ) < 1 || is.na( separator ) ) separator <- " › "
+
 cat( "   - 1 load spec-file...\n" )
 
 source( spec.file )
@@ -61,6 +63,7 @@ if( ! dir.exists( out.dir ) ) {
 	cat( paste0( "   - 5.1 create directory: ", out.dir, "...\n" ) )
 	
 	dir.create( out.dir, recursive = T )
+	
 } else cat( paste0( "   - 5.1 directory ", out.dir, " already exists. do nothing...\n" ) )
 
 back <- getwd( )
