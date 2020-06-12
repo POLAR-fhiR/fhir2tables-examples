@@ -15,7 +15,7 @@ cat( "--------------------------------------------------------------------------
 
 #devtools::install_github( "POLAR-fhiR/fhiR", ref = "f4d1fa9a0eed5b8e1b4690d37de6acb77cca6037", quiet = T, force = F )
 cat( "   - 0 download fhiR package if required...\n" )
-devtools::install_github( "POLAR-fhiR/fhiR", quiet = T )
+devtools::install_github( "POLAR-fhiR/fhiR", quiet = T, force=T )
 
 ###
 # https://polar-fhir.github.io/fhiR/
