@@ -11,7 +11,7 @@ cat( "--------------------------------------------------------------------------
 #devtools::install_github( "POLAR-fhiR/fhiR", ref = "f4d1fa9a0eed5b8e1b4690d37de6acb77cca6037", quiet = T, force = F )
 cat( "   - 0 download fhiR package if required...\n" )
 
-devtools::install_github( "POLAR-fhiR/fhiR", quiet = T )
+devtools::install_github( "POLAR-fhiR/fhiR", ref = "conformance_function", quiet = F, force = T )
 
 ###
 # https://polar-fhir.github.io/fhiR/
@@ -33,7 +33,7 @@ if( length( separator ) < 1 || is.na( separator ) ) separator <- " › "
 
 cat( "   - 1 get conformance...\n" )
 
-conf <- fhiR::conformance( endpoint, separator )
+conf <- fhiR::capability.statement( endpoint, separator )
 
 cat( "   - 2 saving data...\n" )
 
@@ -51,11 +51,11 @@ setwd( out.dir )
 
 cat( "   - 3.2 write csv table...\n" )
 
-write.table( conf, file = "conformance.csv", na = "", sep = ";", dec = ".", row.names = F, quote = F )
+write.table( conf, file = "caps.csv", na = "", sep = ";", dec = ".", row.names = F, quote = F )
 
-cat( "   - 3.3 write tables.RData...\n" )
+cat( "   - 3.3 write caps.RData...\n" )
 
-save( conf, file = "conformance.RData" )
+save( conf, file = "caps.RData" )
 
 setwd( back )
 
