@@ -64,6 +64,7 @@ if( ! dir.exists( out.dir ) ) {
 	cat( paste0( "   - 5.1 create directory: ", out.dir, "...\n" ) )
 	
 	dir.create( out.dir, recursive = T )
+	
 } else cat( paste0( "   - 5.1 directory ", out.dir, " already exists. do nothing...\n" ) )
 
 back <- getwd( )
