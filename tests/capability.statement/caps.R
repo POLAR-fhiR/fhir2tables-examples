@@ -1,8 +1,8 @@
 rm( list = ls( ) )
 
 cat( "----------------------------------------------------------------------------------------------------------------------\n" )
-cat( "\nTest for the conformance function of the R-Package fhiR\n---- --- --- --------- ----\n" )
-cat( "Usage:\n$ Rscript conformance.R -a fhir-endpoint\n" )
+cat( "\nTest for the capability.statement function of the R-Package fhiR\n---- --- --- --------- ----\n" )
+cat( "Usage:\n$ Rscript caps.R -a fhir-endpoint\n" )
 cat( "-a fhir-endpoint: the url of a fhir server endpoint:\n" )
 cat( "-o output-directory: the name of the directory where the results should be saved. if it does not exist it will be created.\n" )
 cat( "-S separator-for-multiply-values: a separator for multiply values in a resource. default is ' -+- '\n\n" )
@@ -11,7 +11,8 @@ cat( "--------------------------------------------------------------------------
 #devtools::install_github( "POLAR-fhiR/fhiR", ref = "f4d1fa9a0eed5b8e1b4690d37de6acb77cca6037", quiet = T, force = F )
 cat( "   - 0 download fhiR package if required...\n" )
 
-devtools::install_github( "POLAR-fhiR/fhiR", ref = "conformance_function", quiet = F, force = T )
+#devtools::install_github( "POLAR-fhiR/fhiR", ref = "conformance_function", quiet = F, force = T )
+devtools::install_github( "POLAR-fhiR/fhiR@conformance_function", quiet = T )
 
 ###
 # https://polar-fhir.github.io/fhiR/
@@ -33,7 +34,7 @@ if( length( separator ) < 1 || is.na( separator ) ) separator <- " › "
 
 cat( "   - 1 get conformance...\n" )
 
-conf <- fhiR::capability.statement( endpoint, separator )
+caps <- fhiR::capability.statement( endpoint, separator )
 
 cat( "   - 2 saving data...\n" )
 
@@ -51,14 +52,13 @@ setwd( out.dir )
 
 cat( "   - 3.2 write csv table...\n" )
 
-write.table( conf, file = "caps.csv", na = "", sep = ";", dec = ".", row.names = F, quote = F )
+write.table( caps, file = "caps.csv", na = "", sep = ";", dec = ".", row.names = F, quote = F )
 
 cat( "   - 3.3 write caps.RData...\n" )
 
-save( conf, file = "caps.RData" )
+save( caps, file = "caps.RData" )
 
 setwd( back )
 
 cat( "   - 4 fin\n" )
-
 
