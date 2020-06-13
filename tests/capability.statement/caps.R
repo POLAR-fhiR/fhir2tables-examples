@@ -36,12 +36,8 @@ cat( "   - 1 get conformance...\n" )
 
 caps <- fhiR::capability.statement( endpoint, separator )
 
-if( is.null( caps ) ) {
-	
-	cat( "   error: capability.statement could not be downloaded...\n" )
-	
-	stop( )
-}
+if( is.null( caps ) ) stop(  )
+
 
 cat( "   - 2 saving data...\n" )
 
