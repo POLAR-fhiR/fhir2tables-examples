@@ -12,7 +12,7 @@ cat( "--------------------------------------------------------------------------
 cat( "   - 0 download fhiR package if required...\n" )
 
 #devtools::install_github( "POLAR-fhiR/fhiR", ref = "conformance_function", quiet = F, force = T )
-devtools::install_github( "POLAR-fhiR/fhiR@conformance_function", quiet = T )
+devtools::install_github( "POLAR-fhiR/fhiR", quiet = T )
 
 ###
 # https://polar-fhir.github.io/fhiR/
@@ -35,6 +35,13 @@ if( length( separator ) < 1 || is.na( separator ) ) separator <- " › "
 cat( "   - 1 get conformance...\n" )
 
 caps <- fhiR::capability.statement( endpoint, separator )
+
+if( is.null( caps ) ) {
+	
+	cat( "   error: capability.statement could not be downloaded...\n" )
+	
+	stop( )
+}
 
 cat( "   - 2 saving data...\n" )
 
