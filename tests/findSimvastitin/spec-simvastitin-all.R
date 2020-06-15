@@ -12,7 +12,8 @@ endpoint <- "https://hapi.fhir.org/baseR4"
 ###
 # fhir.search.request ohne Endpunktangabe
 ###
-# hier bitte mal die Quelle angeben.
+# Quelle:
+# http://149.56.110.42/glossary/snomed/display-snomed.php?action=search&word=simvastatin&type=full
 simvastatin.all <- data.frame( 
 	SNOMED = c( "96304005",                                      "319996000",                                     "319997009",
 			   "320000009",                                     "320006003",                                     "376180003",
@@ -26,7 +27,7 @@ simvastatin.all <- data.frame(
 			   "Simvastatin 20mg",                              "Simvastatin 40mg",                              "Simvastatin 5mg tablet",
 			   "Simvastatin",                                   "Ezetimibe + simvastatin",                       "Simvastatin 10mg / ezetimibe 10mg tablet",
 			   "Simvastatin 20mg / ezetimibe 10mg tablet",      "Simvastatin 40mg / ezetimibe 10mg tablet",      "Simvastatin 80mg / ezetimibe 10mg tablet",
-			   "Simvastatin 80mg orally disintegrating tablet", "Simvastatin 10mg orally disintegrating tablet", "Simvastatin 80mg / ezetimibe 10mg tablet",
+			   "Simvastatin 80mg orally disintegrating tablet", "Simvastatin 10mg orally disintegrating tablet", "Simvastatin 20mg orally disintegrating tablet",
 			   "Simvastatin 40mg orally disintegrating tablet", "Oral form simvastatin" )
 )
 
@@ -96,18 +97,26 @@ tables.design <- list(
 ###
 post.processing <- function( lot ) {
 
+	#dbg lot <- list.of.tables
+	
 	# extract Patient IDS in all tables in references and ids
 	lot <- lapply(
 		lot,
 		function( df ) {
 			
+			#dbg
+			#df <- lot[[ 1 ]]
+			
 			# find all names with .xID
-			pids <- names( df )[ grep( "\\.[A-Z]ID", names( df ) ) ]
+			pids <- names( df )[ grep( "\\.[A-Z]+ID", names( df ) ) ]
 			
 			for( p in pids ) {
 				
+				#dbg
+				#p <- pids[[ 1 ]]
+				
 				# extract id (number)
-				df[[ p ]] <- stringr::str_extract( df[[ p ]], "[[:alpha:]]+$" )
+				df[[ p ]] <- stringr::str_extract( df[[ p ]], "\\w+$" )
 			}
 			
 			df
@@ -143,7 +152,7 @@ post.processing <- function( lot ) {
 				l,
 				by.x = pid.left,
 				by.y = pid.right,
-				all  = T 
+				all  = F
 			)
 		}
 	}

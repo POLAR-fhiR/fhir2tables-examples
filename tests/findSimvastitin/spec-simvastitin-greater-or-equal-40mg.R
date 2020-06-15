@@ -1,4 +1,4 @@
-#Datei sucht ein MedicationStatement mit snomed.codec für Simvastitin und einer Mindesteinnahme von 40mg
+#Datei sucht ein MedicationStatement mit snomed.codec für Simvastatin und einer Mindesteinnahme von 40mg
 #Es werden auch alle Patienten Resourcen dazu gesucht.
 #Auf dem hapiFHIR server findet man dann etwas
 #Stand: 2020_06_13
@@ -12,6 +12,8 @@ endpoint <- "https://hapi.fhir.org/baseR4"
 ###
 # fhir.search.request ohne Endpunktangabe
 ###
+# Quelle:
+# http://149.56.110.42/glossary/snomed/display-snomed.php?action=search&word=simvastatin&type=full
 simvastatin.all <- data.frame( 
 	SNOMED = c( 
 		"96304005",                                      "319996000",                                     "319997009",
@@ -28,24 +30,24 @@ simvastatin.all <- data.frame(
 		"Simvastatin 20mg",                              "Simvastatin 40mg",                              "Simvastatin 5mg tablet",
 		"Simvastatin",                                   "Ezetimibe + simvastatin",                       "Simvastatin 10mg / ezetimibe 10mg tablet",
 		"Simvastatin 20mg / ezetimibe 10mg tablet",      "Simvastatin 40mg / ezetimibe 10mg tablet",      "Simvastatin 80mg / ezetimibe 10mg tablet",
-		"Simvastatin 80mg orally disintegrating tablet", "Simvastatin 10mg orally disintegrating tablet", "Simvastatin 80mg / ezetimibe 10mg tablet",
+		"Simvastatin 80mg orally disintegrating tablet", "Simvastatin 10mg orally disintegrating tablet", "Simvastatin 20mg orally disintegrating tablet",
 		"Simvastatin 40mg orally disintegrating tablet", "Oral form simvastatin"
 	)
 )
 
-simvastitin.snomed.codes <- paste0( simvastatin.all$SNOMED, collapse = "," )
+simvastatin.snomed.codes <- paste0( simvastatin.all$SNOMED, collapse = "," )
 
 got.mg <- grep( "mg", simvastatin.all$TEXT )
 
-simvastitin.ge.40mg <- simvastatin.all[ got.mg, ]
+simvastatin.ge.40mg <- simvastatin.all[ got.mg, ]
 
-simvastitin.ge.40mg <- simvastitin.ge.40mg[ 40 <= gsub( "mg", "", stringi::stri_extract( simvastitin.ge.40mg$TEXT, regex = "([0-9]+)mg" ) ), ]
+simvastatin.ge.40mg <- simvastatin.ge.40mg[ 40 <= as.numeric( gsub( "mg", "", stringi::stri_extract( simvastatin.ge.40mg$TEXT, regex = "([0-9]+)mg" ) ) ), ]
 
-simvastitin.ge.40mg.snomed.codes <- paste0( simvastitin.ge.40mg$SNOMED, collapse = "," )
+simvastatin.ge.40mg.snomed.codes <- paste0( simvastatin.ge.40mg$SNOMED, collapse = "," )
 
 fhir.search.request <- paste0(
 	"MedicationStatement?",
-	paste0( "code=http://snomed.info/ct|", simvastitin.ge.40mg.snomed.codes ),
+	paste0( "code=http://snomed.info/ct|", simvastatin.ge.40mg.snomed.codes ),
 	"&_include=MedicationStatement:subject",
 	"&_include=MedicationStatement:encounter",
 	"&_format=xml",
@@ -57,7 +59,7 @@ tables.design <- list(
 	MedicationStatement = list(
 		"/Bundle/entry/resource/MedicationStatement",
 		list(
-			MS.AID             = "id/@value",
+			MS.MSID            = "id/@value",
 			STATUS.TEXT        = "text/status/@value",
 			STATUS             = "status/@value",
 			MEDICATION.SYSTEM  = "medicationCodeableConcept/coding/system/@value",
@@ -109,7 +111,7 @@ post.processing <- function( lot ) {
 			for( p in pids ) {
 				
 				# extract id (number)
-				df[[ p ]] <- stringr::str_extract( df[[ p ]], "[[:alpha:]]+$" )
+				df[[ p ]] <- stringr::str_extract( df[[ p ]], "\\w+$" )
 			}
 			
 			df
@@ -145,7 +147,7 @@ post.processing <- function( lot ) {
 				l,
 				by.x = pid.left,
 				by.y = pid.right,
-				all  = T 
+				all  = F
 			)
 		}
 	}
