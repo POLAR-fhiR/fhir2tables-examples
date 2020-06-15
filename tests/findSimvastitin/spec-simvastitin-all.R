@@ -12,7 +12,7 @@ endpoint <- "https://hapi.fhir.org/baseR4"
 ###
 # fhir.search.request ohne Endpunktangabe
 ###
-
+# hier bitte mal die Quelle angeben.
 simvastatin.all <- data.frame( 
 	SNOMED = c( "96304005",                                      "319996000",                                     "319997009",
 			   "320000009",                                     "320006003",                                     "376180003",
@@ -30,7 +30,7 @@ simvastatin.all <- data.frame(
 			   "Simvastatin 40mg orally disintegrating tablet", "Oral form simvastatin" )
 )
 
-simvastitin.snomed.codes <- paste0( simvastatin.all$SNOMED, collapse = "," )
+simvastatin.snomed.codes <- paste0( simvastatin.all$SNOMED, collapse = "," )
 
 # fhir.search.request <- paste0(
 # 	"Encounter?",
@@ -40,7 +40,7 @@ simvastitin.snomed.codes <- paste0( simvastatin.all$SNOMED, collapse = "," )
 
 fhir.search.request <- paste0(
 	"MedicationStatement?",
-	paste0( "code=http://snomed.info/ct|", simvastitin.snomed.codes ),
+	paste0( "code=http://snomed.info/ct|", simvastatin.snomed.codes ),
 	"&_include=MedicationStatement:subject",
 	"&_include=MedicationStatement:encounter",
 	"&_format=xml",
