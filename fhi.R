@@ -13,10 +13,11 @@ cat( "-n maximal-number-of-bundles-directory: the limit of downloaded bundle cou
 cat( "-S separator-for-multiply-values: a separator for multiply values in a resource. default is ' -+- '\n\n" )
 cat( "----------------------------------------------------------------------------------------------------------------------\n" )
 
-#devtools::install_github( "POLAR-fhiR/fhiR", ref = "f4d1fa9a0eed5b8e1b4690d37de6acb77cca6037", quiet = T, force = F )
 cat( "   - 0 download fhiR package if required...\n" )
 
-devtools::install_github( "POLAR-fhiR/fhiR", quiet = T )
+devtools::install_github( "POLAR-fhiR/fhiR", quiet = F, force = F )
+
+#devtools::install_github( "POLAR-fhiR/fhiR", quiet = F )
 
 ###
 # https://polar-fhir.github.io/fhiR/
@@ -43,15 +44,15 @@ cat( "   - 1 load spec-file...\n" )
 
 source( spec.file )
 
-url     <- fhiR::paste.paths( path1 = endpoint, path2 = fhir.search.request )
+url     <- fhiR::paste_paths( path1 = endpoint, path2 = fhir.search.request )
 
 cat( "   - 2 get bundles...\n" )
 
-bundles <- fhiR::get.bundles( request = url, max.bundles = max.bundles, verbose = T )
+bundles <- fhiR::fhir_search( request = url, max.bundles = max.bundles, verbose = T )
 
 cat( "   - 3 convert bundles to data frames...\n" )
 
-list.of.tables <- fhiR::bundles2dfs( bundles = bundles, design = tables.design, sep = separator )
+list.of.tables <- fhiR::fhir2dfs( bundles = bundles, design = tables.design, sep = separator )
 
 cat( "   - 4 post processing...\n" )
 
