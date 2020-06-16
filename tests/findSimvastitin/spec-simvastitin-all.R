@@ -56,7 +56,7 @@ tables.design <- list(
 	MedicationStatement = list(
 		"/Bundle/entry/resource/MedicationStatement",
 		list(
-			MS.AID             = "id/@value",
+			MS.MSID            = "id/@value",
 			STATUS.TEXT        = "text/status/@value",
 			STATUS             = "status/@value",
 			MEDICATION.SYSTEM  = "medicationCodeableConcept/coding/system/@value",
