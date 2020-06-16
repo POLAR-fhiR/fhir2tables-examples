@@ -1,0 +1,166 @@
+#Datei sucht ein MedicationStatement mit snomed.codes für Simvastitin
+#Es werden auch alle Patienten Resourcen dazu gesucht.
+#Auf dem hapiFHIR server findet man dann etwas
+#Stand: 2020_06_12
+###
+# Endpunkt des fhir r4 Servers
+###
+#endpoint <-  "https://vonk.fire.ly/R4/"
+#endpoint <- "https://try.smilecdr.com:8000/"
+endpoint <- "https://hapi.fhir.org/baseR4"
+
+###
+# fhir.search.request ohne Endpunktangabe
+###
+# Quelle:
+# http://149.56.110.42/glossary/snomed/display-snomed.php?action=search&word=simvastatin&type=full
+simvastatin.all <- data.frame( 
+	SNOMED = c( "96304005",                                      "319996000",                                     "319997009",
+			   "320000009",                                     "320006003",                                     "376180003",
+			   "376181004",                                     "376638003",                                     "376834003",
+			   "387584000",                                     "414175005",                                     "414176006",
+			   "414177002",                                     "414178007",                                     "414179004",
+			   "427750007",                                     "427953000",                                     "428789004",
+			   "429374003",                                     "714580001" ),
+	TEXT  = c( "Simvastatin",                                   "Simvastatin 10mg tablet",                       "Simvastatin 20mg tablet",                  
+			   "Simvastatin 40mg tablet",                       "Simvastatin 80mg tablet",                       "Simvastatin 10mg",
+			   "Simvastatin 20mg",                              "Simvastatin 40mg",                              "Simvastatin 5mg tablet",
+			   "Simvastatin",                                   "Ezetimibe + simvastatin",                       "Simvastatin 10mg / ezetimibe 10mg tablet",
+			   "Simvastatin 20mg / ezetimibe 10mg tablet",      "Simvastatin 40mg / ezetimibe 10mg tablet",      "Simvastatin 80mg / ezetimibe 10mg tablet",
+			   "Simvastatin 80mg orally disintegrating tablet", "Simvastatin 10mg orally disintegrating tablet", "Simvastatin 20mg orally disintegrating tablet",
+			   "Simvastatin 40mg orally disintegrating tablet", "Oral form simvastatin" )
+)
+
+simvastatin.snomed.codes <- paste0( simvastatin.all$SNOMED, collapse = "," )
+
+# fhir.search.request <- paste0(
+# 	"Encounter?",
+# 	"&_format=xml",
+# 	"&_pretty=true",
+# 	"&_count=500")
+
+fhir.search.request <- paste0(
+	"MedicationStatement?",
+	paste0( "code=http://snomed.info/ct|", simvastatin.snomed.codes ),
+	"&_include=MedicationStatement:subject",
+	"&_include=MedicationStatement:encounter",
+	"&_format=xml",
+	"&_pretty=true",
+	"&_count=500")
+
+###http://www.whocc.no/atc 
+# Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden
+# Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
+###
+tables.design <- list(
+	MedicationStatement = list(
+		"/Bundle/entry/resource/MedicationStatement",
+		list(
+			MS.MSID            = "id/@value",
+			STATUS.TEXT        = "text/status/@value",
+			STATUS             = "status/@value",
+			MEDICATION.SYSTEM  = "medicationCodeableConcept/coding/system/@value",
+			MEDICATION.CODE    = "medicationCodeableConcept/coding/code/@value",
+			MEDICATION.ANZEIGE = "medicationCodeableConcept/coding/display/@value",
+			DOSAGE             = "dosage/text/@value",
+			DOSAGE.TIMING      = "dosage/timing/repeat/frequency/@value",
+			DOSAGE.PERIOD      = "dosage/timing/repeat/period/@value",
+			DOSAGE.PERIOD.UNIT = "dosage/timing/repeat/periodUnit/@value",
+			MS.PID             = "subject/reference/@value",
+			LAST.UPDATE        = "meta/lastUpdated/@value"
+		)
+	),
+	Patient = list(
+		"/Bundle/entry/resource/Patient",
+		list(
+			P.PID           = "id/@value",
+			NAME.USE        = "name/use/@value",
+			NAME.GIVEN      = "name/given/@value",
+			NAME.FAMILY     = "name/family/@value",
+			GENDER          = "gender/@value",
+			BIRTHDATE       = "birthDate/@value"
+		)
+	),
+	Encounter = list(
+		"/Bundle/entry/resource/Encounter",
+		list(
+			E.EID = "id/@value",
+			E.PID = "subject/reference/@value",
+			START = "period/start/@value",
+			END   = "period/end/@value"
+		)
+	)
+)
+
+###
+# filtere Daten in Tabellen vor dem Export ins Ausgabeverzeichnis
+###
+post.processing <- function( lot ) {
+
+	#dbg lot <- list.of.tables
+	
+	# extract Patient IDS in all tables in references and ids
+	lot <- lapply(
+		lot,
+		function( df ) {
+			
+			#dbg
+			#df <- lot[[ 1 ]]
+			
+			# find all names with .xID
+			pids <- names( df )[ grep( "\\.[A-Z]+ID", names( df ) ) ]
+			
+			for( p in pids ) {
+				
+				#dbg
+				#p <- pids[[ 1 ]]
+				
+				# extract id (number)
+				df[[ p ]] <- stringr::str_extract( df[[ p ]], "\\w+$" )
+			}
+			
+			df
+		}
+	)
+
+	# merge all tables by patient's ids
+	all. <- data.frame( )
+	
+	#find 1st not empty data frame and store id for later merging
+	for( l in lot ) {
+	
+		if( 0 < nrow( l ) ) {
+			
+			all. <- l
+			
+			pid.left <- names( l )[ grep( "PID$", names( l ) ) ]
+			
+			break
+		}
+	}
+	
+	# merge all not empty data frames to all.
+	for( l in lot ) {
+		
+		if( 0 < nrow( l ) && ! identical( l, all. ) ) {
+			
+			# find patient's id
+			pid.right <- names( l )[ grep( "PID$", names( l ) ) ]
+			
+			all. <- merge(
+				all.,
+				l,
+				by.x = pid.left,
+				by.y = pid.right,
+				all  = F
+			)
+		}
+	}
+
+	lot$ALL <- all.
+		
+	###
+	# gib gefilterte Daten zurueck
+	###
+	lot
+}
