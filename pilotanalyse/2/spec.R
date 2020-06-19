@@ -7,7 +7,7 @@ endpoint <-  "https://vonk.fire.ly/R4/"
 ###
 # fhir search ohne Endpunktangabe
 ###
-fhir.search <- "Patient?_format=xml&gender=male"
+fhir.search.request <- "Patient?_format=xml&gender=male"
 
 ###
 # Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden
