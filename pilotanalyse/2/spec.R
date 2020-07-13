@@ -3,7 +3,7 @@
 ###
 endpoint <-  "https://vonk.fire.ly/R4/"
 #endpoint <- "https://hapi.fhir.org/baseR4"
-
+endpoint <- "https://fhir.simplifier.net/MedizininformatikInitiative-POLAR"
 ###
 # fhir search ohne Endpunktangabe
 ###

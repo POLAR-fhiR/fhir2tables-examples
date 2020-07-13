@@ -9,7 +9,7 @@ endpoint <- "https://hapi.fhir.org/baseR4"
 ###
 fhir.search.request <- paste0(
 	"Observation?",
-	"&code=http://loinc.org|85354-9",
+	"code=http://loinc.org|85354-9",
 	"&_include=Observation:subject",
 	"&_include=Observation:encounter",
 	"&_format=xml",

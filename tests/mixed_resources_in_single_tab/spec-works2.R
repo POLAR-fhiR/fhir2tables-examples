@@ -1,28 +1,45 @@
+# 1 - a variable named endpoint that stores the endpoint of the fhir server
+# 2 - a variable named fhir_search_request that stores the fhir search request without the endpoint part
+# 3 - a variable named max_bundles: the limit of downloaded bundle count
+# 4 - a variable named design that stores the design of the resulting data frames
+# 5 - a variable named output_directory: the name of the directory where the results should be saved. if it does not exist it will be created.
+# 6 - a variable named separator: a separator for multiply values in a resource. default is ' -+- '
+# 7 - a variable named brackets: brackets surrounding the indices for multiply values in a resource. no brackets mean no indexing.
+# 8 - a function named post_processing that allows some post processing on the constructed data frames.
+
+
 ###
-# Endpunkt des fhir r4 Servers
+# 1 Endpunkt des fhir r4 Servers
 ###
 #endpoint <-  "https://vonk.fire.ly/R4/"
 endpoint <- "https://hapi.fhir.org/baseR4"
 
+
 ###
-# fhir.search.request ohne Endpunktangabe
+# 2 fhir_search_request ohne Endpunktangabe
 ###
-fhir.search.request <- paste0(
+fhir_search_request <- paste0(
 	"Observation?",
-	"&code=http://loinc.org|85354-9",
+	"code=http://loinc.org|85354-9",
 	"&_include=Observation:subject",
 	"&_include=Observation:encounter",
 	"&_format=xml",
 	"&_pretty=true",
 	"&_count=500000" )
 
+
 ###
-# Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden
-# Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
+# 3 max_bundles
 ###
-tables.design <- list(
+max_bundles <- Inf
+
+
+###
+# 4 design
+###
+design <- list(
 	Observation = list(
-		entry   = ".//Observation",
+		entry   = "//Observation",
 		items = list( 
 			O.OID  = "id/@value",
 			O.PID  = "subject/reference/@value",
@@ -33,7 +50,7 @@ tables.design <- list(
 		)
 	),
 	Encounter = list(
-		".//Encounter",
+		"//Encounter",
 		list(
 			E.EID = "id/@value",
 			E.PID = "subject/reference/@value",
@@ -42,7 +59,7 @@ tables.design <- list(
 		)
 	),
 	Patient = list(
-		".//Patient",
+		"//Patient",
 		list(
 			P.PID      = "id/@value", 
 			VORNAME    = "name/given/@value", 
@@ -54,17 +71,42 @@ tables.design <- list(
 )
 
 ###
-# filtere Daten in Tabellen vor dem Export ins Ausgabeverzeichnis
+# 5 output_directory
 ###
-post.processing <- function( lot ) {
+output_directory <- "works2"
+
+###
+# 6 separator
+###
+separator <- " › "
+
+
+###
+# 7 brackets
+###
+brackets <- c("<", ">")
+
+###
+# 8 filter Data in Tables before Export into output directory
+###
+post_processing <- function( lot ) {
 	
-	#lot <- list.of.tables
-	#lot <- lapply( lot, na.omit )
+	#dbg
+	#lot <- list_of_tables
+	
+	lot$Observation <- fhircrackr::fhir_melt( indexed_data_frame = lot$Observation, columns = c( "DATE" ), all_columns = T, brackets = brackets, sep = separator, id_name = "ID_OBS" )
+	lot$Observation <- fhircrackr::fhir_rm_indices( indexed_data_frame = lot$Observation, brackets = brackets, sep = separator )
+	
+	lot$Encounter <- fhircrackr::fhir_melt( lot$Encounter, c( "START", "END" ), all_columns = T, brackets = brackets, sep = separator, id_name = "ID_ENC" )
+	lot$Encounter <- fhircrackr::fhir_rm_indices( lot$Encounter, brackets = brackets, sep = separator )
+	
+	lot$Patient <- fhircrackr::fhir_rm_indices( lot$Patient, brackets = brackets, sep = separator )
 	
 	lot <- lapply(
 		lot,
 		function( df ) {
 			
+			#dbg
 			#df <- lot[[ 1 ]]
 			
 			# find all names with .xID
@@ -73,6 +115,7 @@ post.processing <- function( lot ) {
 			for( p in pids ) {
 				
 				#p <- pids[[ 1 ]]
+				
 				# extract id
 				df[[ p ]] <- stringr::str_extract( df[[ p ]], "[0-9]+$" )
 			}
@@ -97,6 +140,9 @@ post.processing <- function( lot ) {
 		)
 	
 	lot$ALL$AGE <- round( as.double( as.Date( lot$ALL$DATE ) - as.Date( lot$ALL$GEBURTSTAG ) ) / 365.25, 2 )
+	
+	#maybe remove all not fulfilled rows
+	#lot <- lapply( lot, na.omit )
 	
 	lot
 }
