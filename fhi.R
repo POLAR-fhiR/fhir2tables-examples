@@ -55,7 +55,7 @@ if( ! dir.exists( output_directory ) ) {
 	
 	cat( paste0( "   - 5.1 create directory: ", output_directory, "...\n" ) )
 	
-	dir.create( out.dir, recursive = T )
+	dir.create( output_directory, recursive = T )
 	
 } else cat( paste0( "   - 5.1 directory ", output_directory, " already exists. do nothing...\n" ) )
 
