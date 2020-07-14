@@ -1,21 +1,38 @@
+# 1 - a variable named endpoint that stores the endpoint of the fhir server
+# 2 - a variable named fhir_search_request that stores the fhir search request without the endpoint part
+# 3 - a variable named max_bundles: the limit of downloaded bundle count
+# 4 - a variable named design that stores the design of the resulting data frames
+# 5 - a variable named output_directory: the name of the directory where the results should be saved. if it does not exist it will be created.
+# 6 - a variable named separator: a separator for multiply values in a resource. default is ' -+- '
+# 7 - a variable named brackets: brackets surrounding the indices for multiply values in a resource. no brackets mean no indexing.
+# 8 - a function named post_processing that allows some post processing on the constructed data frames.
 ###
-# Endpunkt des fhir r4 Servers
+# 1 endpoint of FHIR r4 Servers
 ###
 #endpoint <-  "https://vonk.fire.ly/R4/"
 endpoint <- "https://hapi.fhir.org/baseR4/"
 
 ###
-# fhir.search.request ohne Endpunktangabe
+# 2 fhir_search_request without endpoint
 ###
-fhir.search.request <- "Observation?code=http://loinc.org|3141-9&_format=xml&_count=50"
+fhir_search_request <- paste0(
+		"Observation?",
+		"code=http://loinc.org|3141-9&",
+		"_format=xml&_count=50")
 
 ###
-# Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden
-# Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
+# 3 max_bundles
 ###
-tables.design <- list(
+max_bundles <- Inf
+
+
+###
+# 4 table design
+###
+
+design <- list(
 	Observation = list(
-		entry   = ".//Observation",
+		entry   = "//Observation",
 		items = list( 
 			PID   = "subject/reference/@value",
 			OID     = "id/@value", 
@@ -26,22 +43,30 @@ tables.design <- list(
 )
 
 ###
-# filtere Daten in Tabellen vor dem Export ins Ausgabeverzeichnis
+# 5 output_directory
 ###
-post.processing <- function( list.of.tables ) {
+output_directory <- "works"
 
-  ###
-  # filter here whatever you want!
-  ###
-		
-  ###
-  # nur komplette Datensaetze erwuenscht
-  ###
-  list.of.tables <- lapply( list.of.tables, na.omit )
 
-  ###
-  # gib gefilterte Daten zurueck
-  ###
-  list.of.tables
+###
+# 6 separator
+###
+separator <- " › "
+
+
+###
+# 7 brackets
+###
+brackets <- NULL#c("<", ">")
+
+###
+# 8 filter Data in Tables before Export into output directory
+###
+
+post_processing <- function( lot ) {
+
+  lot <- lapply( lot, na.omit )
+
+  lot
 }
 
