@@ -7,12 +7,18 @@
 # 7 - a variable named brackets: brackets surrounding the indices for multiply values in a resource. no brackets mean no indexing.
 # 8 - a function named post_processing that allows some post processing on the constructed data frames.
 
-# Observation blood pressure from loinc code
+
+##############################################
+# Observation blood pressure from loinc code #
+##############################################
+
+
 ###
 # 1 endpoint of FHIR r4 Server
 ###
 #endpoint <-  "https://vonk.fire.ly/R4/"#
 endpoint <- "https://hapi.fhir.org/baseR4"
+
 
 ###
 # 2 fhir.search.request without endpoint
@@ -21,6 +27,8 @@ fhir_search_request <- paste0(
 	"Observation?",
     "code=http://loinc.org|85354-9&_format=xml",
     "&_count=500")
+
+
 ###
 # 3 max_bundles
 ###
@@ -31,11 +39,10 @@ max_bundles <- Inf
 ###
 # 4 design
 ###
-
 design <- list(
-	Observation = list(
-		entry   = "//Observation",
-		items = list( 
+	Observations = list(
+		"//Observation",
+		list( 
 			PID   = "subject/reference/@value",
 			OID   = "id/@value",
 			DIA   = "component[code/coding/code/@value='8462-4']/valueQuantity/value/@value", 
@@ -44,10 +51,12 @@ design <- list(
 		)
 	)
 )
+
+
 ###
 # 5 output_directory
 ###
-output_directory <- "works"
+output_directory <- "result"
 
 
 ###
@@ -64,13 +73,14 @@ brackets <- NULL#c("<", ">")
 ###
 # 8 filter Data in Tables before Export into output directory
 ###
-
 post_processing <- function( lot ) {
 
-	lot$Observation <- lot$Observation[ 
-		( ! is.na( lot$Observation$DIA ) &  80 < as.numeric( as.character( lot$Observation$DIA ) ) ) |
-		( ! is.na( lot$Observation$SYS ) & 120 < as.numeric( as.character( lot$Observation$SYS ) ) ), ]
+	#dbg
+	#lot <- list_of_tables
+	
+	lot$Observations <- lot$Observations[ 
+		( ! is.na( lot$Observations$DIA ) & ! is.numeric( lot$Observations$DIA ) &  80 < lot$Observations$DIA ) |
+		( ! is.na( lot$Observations$SYS ) & ! is.numeric( lot$Observations$SYS ) & 120 < lot$Observations$SYS ), ]
 
 	lot
 }
-

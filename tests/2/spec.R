@@ -6,11 +6,19 @@
 # 6 - a variable named separator: a separator for multiply values in a resource. default is ' -+- '
 # 7 - a variable named brackets: brackets surrounding the indices for multiply values in a resource. no brackets mean no indexing.
 # 8 - a function named post_processing that allows some post processing on the constructed data frames.
+
+
+############################
+# Patients with thier Ages #
+############################
+
+
 ###
 # 1 endpoint of FHIR r4 Server
 ###
-#endpoint <-  "https://vonk.fire.ly/R4/"
-endpoint <- "https://hapi.fhir.org/baseR4/"
+endpoint <-  "https://vonk.fire.ly/R4/"
+#endpoint <- "https://hapi.fhir.org/baseR4/"
+
 
 ###
 # 2 fhir_search_request without endpoint
@@ -20,7 +28,7 @@ fhir_search_request <- paste0(
 	"_format=xml",
 	"&gender=male,female",
 	"&_count=500")
-###
+
 
 ###
 # 3 max_bundles
@@ -44,10 +52,12 @@ design <- list(
 		)
 	)
 )
+
+
 ###
 # 5 output_directory
 ###
-output_directory <- "works"
+output_directory <- "result"
 
 
 ###
@@ -61,10 +71,10 @@ separator <- " › "
 ###
 brackets <- NULL#c("<", ">")
 
+
 ###
 # 8 filter Data in Tables before Export into output directory
 ###
-
 post_processing <- function( lot ) {
 	
 	lot <- lapply( lot, na.omit )

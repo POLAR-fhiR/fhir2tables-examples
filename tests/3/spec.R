@@ -6,11 +6,19 @@
 # 6 - a variable named separator: a separator for multiply values in a resource. default is ' -+- '
 # 7 - a variable named brackets: brackets surrounding the indices for multiply values in a resource. no brackets mean no indexing.
 # 8 - a function named post_processing that allows some post processing on the constructed data frames.
+
+
+#####################################
+# Body Weight in kg from loinc code #
+#####################################
+
+
 ###
 # 1 endpoint of FHIR r4 Servers
 ###
 #endpoint <-  "https://vonk.fire.ly/R4/"
 endpoint <- "https://hapi.fhir.org/baseR4/"
+
 
 ###
 # 2 fhir_search_request without endpoint
@@ -18,7 +26,8 @@ endpoint <- "https://hapi.fhir.org/baseR4/"
 fhir_search_request <- paste0(
 		"Observation?",
 		"code=http://loinc.org|3141-9&",
-		"_format=xml&_count=50")
+		"_format=xml&_count=500")
+
 
 ###
 # 3 max_bundles
@@ -29,7 +38,6 @@ max_bundles <- Inf
 ###
 # 4 table design
 ###
-
 design <- list(
 	Observation = list(
 		entry   = "//Observation",
@@ -42,10 +50,11 @@ design <- list(
 	)
 )
 
+
 ###
 # 5 output_directory
 ###
-output_directory <- "works"
+output_directory <- "result"
 
 
 ###
@@ -59,14 +68,19 @@ separator <- " › "
 ###
 brackets <- NULL#c("<", ">")
 
+
 ###
 # 8 filter Data in Tables before Export into output directory
 ###
-
 post_processing <- function( lot ) {
 
-  lot <- lapply( lot, na.omit )
-
-  lot
+	#dbg
+	lot <- list_of_tables
+	
+	lot <- lapply( lot, function( d ) apply( d, 2, function( d.row ) { d.row[ nchar( d.row ) < 1 ] <- NA; d.row } ) )
+	
+	lot <- lapply( lot, na.omit )
+	
+	lot
 }
 
