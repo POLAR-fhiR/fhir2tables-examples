@@ -75,6 +75,7 @@ design <- list(
 ###
 output_directory <- "observations_patients_encounters_20200713_vonk"
 
+
 ###
 # 6 separator
 ###
@@ -85,6 +86,7 @@ separator <- " › "
 # 7 brackets
 ###
 brackets <- NULL#c("<", ">")
+
 
 ###
 # 8 filter Data in Tables before Export into output directory
