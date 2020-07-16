@@ -23,11 +23,11 @@ $ ./run-example.sh
 ```
 # 1 - a variable named endpoint that stores the endpoint of the fhir server
 # 2 - a variable named fhir_search_request that stores the fhir search request without the endpoint part
-# 3 - a variable named max_bundles: the limit of downloaded bundle count
+# 3 - a variable named max_bundles the limit of downloaded bundle count
 # 4 - a variable named design that stores the design of the resulting data frames
-# 5 - a variable named output_directory: the name of the directory where the results should be saved. if it does not exist it will be created.
-# 6 - a variable named separator: a separator for multiply values in a resource. default is ' -+- '
-# 7 - a variable named brackets: brackets surrounding the indices for multiply values in a resource. no brackets mean no indexing.
+# 5 - a variable named output_directory the name of the directory where the results should be saved. if it does not exist it will be created.
+# 6 - a variable named separator a separator for multiply values in a resource. default is ' -+- '
+# 7 - a variable named brackets brackets surrounding the indices for multiply values in a resource. no brackets mean no indexing.
 # 8 - a function named post_processing that allows some post processing on the constructed data frames.
 
 
