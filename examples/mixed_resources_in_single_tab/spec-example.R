@@ -9,7 +9,7 @@
 
 
 ###
-# 1 Endpunkt des fhir r4 Servers
+# 1 endpoints of a fhir r4 server
 ###
 #endpoint <-  "https://vonk.fire.ly/R4/"
 endpoint <- "https://hapi.fhir.org/baseR4"
