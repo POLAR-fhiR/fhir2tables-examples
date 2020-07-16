@@ -18,6 +18,7 @@ endpoint <- "https://hapi.fhir.org/baseR4"
 ###
 # 2 fhir_search_request ohne Endpunktangabe
 ###
+# all blood pressure observations with their related patients and encounters
 fhir_search_request <- paste0(
 	"Observation?",
 	"code=http://loinc.org|85354-9",
@@ -25,31 +26,33 @@ fhir_search_request <- paste0(
 	"&_include=Observation:encounter",
 	"&_format=xml",
 	"&_pretty=true",
-	"&_count=500000" )
+	"&_count=500" )
 
 
 ###
 # 3 max_bundles
 ###
+# get all bunles available
 max_bundles <- Inf
 
 
 ###
 # 4 design
 ###
+# select what's interresting
 design <- list(
-	Observation = list(
-		entry   = "//Observation",
-		items = list( 
-			O.OID  = "id/@value",
-			O.PID  = "subject/reference/@value",
-			O.EID  = "encounter/reference/@value",
-			DIA    = "component[code/coding/code/@value='8462-4']/valueQuantity/value/@value", 
-			SYS    = "component[code/coding/code/@value='8480-6']/valueQuantity/value/@value",
-			DATE   = "effectiveDateTime/@value"
+	Observations = list(
+		"//Observation",
+		list( 
+			O.OID = "id/@value",
+			O.PID = "subject/reference/@value",
+			O.EID = "encounter/reference/@value",
+			DIA   = "component[code/coding/code/@value='8462-4']/valueQuantity/value/@value", 
+			SYS   = "component[code/coding/code/@value='8480-6']/valueQuantity/value/@value",
+			DATE  = "effectiveDateTime/@value"
 		)
 	),
-	Encounter = list(
+	Encounters = list(
 		"//Encounter",
 		list(
 			E.EID = "id/@value",
@@ -58,14 +61,14 @@ design <- list(
 			END   = "period/end/@value"
 		)
 	),
-	Patient = list(
+	Patients = list(
 		"//Patient",
 		list(
-			P.PID      = "id/@value", 
-			VORNAME    = "name/given/@value", 
-			NACHNAME   = "name/family/@value",
-			GESCHLECHT = "gender/@value", 
-			GEBURTSTAG = "birthDate/@value" 
+			P.PID    = "id/@value", 
+			GVN.NAME = "name/given/@value", 
+			FAM.NAME = "name/family/@value",
+			SEX      = "gender/@value", 
+			DOB      = "birthDate/@value" 
 		)
 	)
 )
@@ -74,40 +77,37 @@ design <- list(
 ###
 # 5 output_directory
 ###
-output_directory <- "works"
+output_directory <- "results"
 
 
 ###
 # 6 separator
 ###
-separator <- " › "
+separator <- " | "
 
 
 ###
-# 7 brackets
+# 7 brackets for multi entries
 ###
+# we doen't need brackets, because we don't add indices
 brackets <- NULL#c("<", ">")
+
 
 ###
 # 8 filter Data in Tables before Export into output directory
 ###
 post_processing <- function( lot ) {
-	
-	#dbg
-	#lot <- list_of_tables
-	
+
+	#make ids mergeable
 	lot <- lapply(
 		lot,
 		function( df ) {
-			
-			#df <- lot[[ 1 ]]
 			
 			# find all names with .xID
 			pids <- names( df )[ grep( "\\.[A-Z]ID", names( df ) ) ]
 			
 			for( p in pids ) {
 				
-				#p <- pids[[ 1 ]]
 				# extract id
 				df[[ p ]] <- stringr::str_extract( df[[ p ]], "[0-9]+$" )
 			}
@@ -116,22 +116,30 @@ post_processing <- function( lot ) {
 		}
 	)
 	
+	#merge all tables by ids
 	lot$ALL <- 
 		merge( 
 			merge( 
-				lot$Observation, 
-				lot$Patient, 
+				lot$Observations, 
+				lot$Patients, 
 				by.x = "O.PID", 
 				by.y = "P.PID",
 				all = F
 			),
-			lot$Encounter, 
+			lot$Encounters, 
 			by.x = "O.EID",
 			by.y = "E.EID",
 			all = F
 		)
 	
-	lot$ALL$AGE <- round( as.double( as.Date( lot$ALL$DATE ) - as.Date( lot$ALL$GEBURTSTAG ) ) / 365.25, 2 )
+	# add age column
+	lot$ALL$AGE <- round( as.double( as.Date( lot$ALL$DATE ) - as.Date( lot$ALL$DOB ) ) / 365.25, 2 )
 	
+	
+	# select only interresting columns
+	lot$ALL <- lot$ALL[ , c( "O.PID", "O.OID", "O.EID", "GVN.NAME", "FAM.NAME", "SEX", "AGE", "DIA", "SYS" ) ]
+
+	# return list of tables
 	lot
 }
+
