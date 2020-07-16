@@ -1,59 +1,82 @@
 # Fhir2Tables
 
-## Tests fuer das R-Paket fhiR
-### Erstellen eines Tests
-Das Erstellen eines Tests ist im Wesentlichen durch das Schreiben einer Spezifikation in Form eines R-Skriptes erledigt.  
-Das Spezifikationsskript muss 4 Elemente enthalten.
+## Examples using the R-Pakage fhircrackr
 
-1. Der baseR4-Endpoint des FHIR-Servers:
-```endpoint```
-2. Die FHIR-Suchanfrage:
-```fhir.search.request```
-3. Die Struktur der aus dem Bundle zu erstellenden Tabellen:
-```tables.design```
-4. Eine Funktion namens post.processing, die die Daten wie gewünscht filtert und weiterverarbeitet:
-```post.processing( list.of.tables )```  
+### Run an Example  
+```
+$ Rscript ../../fhi.R -s spec-example.R
+```
 
-Beispiel einer Spezifikation zum Abfragen aller vollständigen Datensätze aller Patienten und Aufnahmen zu allen Blutdruckuntersuchungen mit anschliessender Alterberechnung der Patienten zum Zeitpunkt der Unteruschung/Aufnahme:  
-**spec.R:**
+or with the shell script
 
 ```
+$ ./run-example.sh
+
+```
+
+### Run your own Example
+1. Copy a example folder into the same path where the original example is
+2. Open your copy of the file spec-example.R
+3. Modify points 1 to 8 according to your requirements
+4. Start your copy of run-example.sh
+
+```
+# 1 - a variable named endpoint that stores the endpoint of the fhir server
+# 2 - a variable named fhir_search_request that stores the fhir search request without the endpoint part
+# 3 - a variable named max_bundles: the limit of downloaded bundle count
+# 4 - a variable named design that stores the design of the resulting data frames
+# 5 - a variable named output_directory: the name of the directory where the results should be saved. if it does not exist it will be created.
+# 6 - a variable named separator: a separator for multiply values in a resource. default is ' -+- '
+# 7 - a variable named brackets: brackets surrounding the indices for multiply values in a resource. no brackets mean no indexing.
+# 8 - a function named post_processing that allows some post processing on the constructed data frames.
+
+
 ###
-# Endpunkt des fhir r4 Servers
+# 1 Endpunkt des fhir r4 Servers
 ###
 #endpoint <-  "https://vonk.fire.ly/R4/"
 endpoint <- "https://hapi.fhir.org/baseR4"
 
+
 ###
-# fhir.search.request ohne Endpunktangabe
+# 2 fhir_search_request ohne Endpunktangabe
 ###
-fhir.search.request <- paste0(
+# all blood pressure observations with their related patients and encounters
+fhir_search_request <- paste0(
 	"Observation?",
-	"&code=http://loinc.org|85354-9",
+	"code=http://loinc.org|85354-9",
 	"&_include=Observation:subject",
 	"&_include=Observation:encounter",
 	"&_format=xml",
 	"&_pretty=true",
-	"&_count=500000" )
+	"&_count=500" )
+
 
 ###
-# Welche Daten aus den Pages sollen wie in welchen Tabellen erzeugt werden
-# Hier nur eine Tabelle Patient mit den Einträgen PID, Geschlecht und Geburtsdatum
+# 3 max_bundles
 ###
-tables.design <- list(
-	Observation = list(
-		entry   = ".//Observation",
-		items = list(
-			O.OID  = "id/@value",
-			O.PID  = "subject/reference/@value",
-			O.EID  = "encounter/reference/@value",
-			DIA    = "component[code/coding/code/@value='8462-4']/valueQuantity/value/@value",
-			SYS    = "component[code/coding/code/@value='8480-6']/valueQuantity/value/@value",
-			DATE   = "effectiveDateTime/@value"
+# get all bunles available
+max_bundles <- Inf
+
+
+###
+# 4 design
+###
+# select what's interresting
+design <- list(
+	Observations = list(
+		"//Observation",
+		list(
+			O.OID = "id/@value",
+			O.PID = "subject/reference/@value",
+			O.EID = "encounter/reference/@value",
+			DIA   = "component[code/coding/code/@value='8462-4']/valueQuantity/value/@value",
+			SYS   = "component[code/coding/code/@value='8480-6']/valueQuantity/value/@value",
+			DATE  = "effectiveDateTime/@value"
 		)
 	),
-	Encounter = list(
-		".//Encounter",
+	Encounters = list(
+		"//Encounter",
 		list(
 			E.EID = "id/@value",
 			E.PID = "subject/reference/@value",
@@ -61,36 +84,53 @@ tables.design <- list(
 			END   = "period/end/@value"
 		)
 	),
-	Patient = list(
-		".//Patient",
+	Patients = list(
+		"//Patient",
 		list(
-			P.PID      = "id/@value",
-			VORNAME    = "name/given/@value",
-			NACHNAME   = "name/family/@value",
-			GESCHLECHT = "gender/@value",
-			GEBURTSTAG = "birthDate/@value"
+			P.PID    = "id/@value",
+			GVN.NAME = "name/given/@value",
+			FAM.NAME = "name/family/@value",
+			SEX      = "gender/@value",
+			DOB      = "birthDate/@value"
 		)
 	)
 )
 
-###
-# filtere Daten in Tabellen vor dem Export ins Ausgabeverzeichnis
-# lot: list of tables
-###
-post.processing <- function( lot ) {
 
+###
+# 5 output_directory
+###
+output_directory <- "results"
+
+
+###
+# 6 separator
+###
+separator <- " | "
+
+
+###
+# 7 brackets for multi entries
+###
+# we doen't need brackets, because we don't add indices
+brackets <- NULL#c("<", ">")
+
+
+###
+# 8 filter Data in Tables before Export into output directory
+###
+post_processing <- function( lot ) {
+
+	#make ids mergeable
 	lot <- lapply(
 		lot,
 		function( df ) {
-
-			#df <- lot[[ 1 ]]
 
 			# find all names with .xID
 			pids <- names( df )[ grep( "\\.[A-Z]ID", names( df ) ) ]
 
 			for( p in pids ) {
 
-				#p <- pids[[ 1 ]]
 				# extract id
 				df[[ p ]] <- stringr::str_extract( df[[ p ]], "[0-9]+$" )
 			}
@@ -99,80 +139,42 @@ post.processing <- function( lot ) {
 		}
 	)
 
+	#merge all tables by ids
 	lot$ALL <-
 		merge(
 			merge(
-				lot$Observation,
-				lot$Patient,
+				lot$Observations,
+				lot$Patients,
 				by.x = "O.PID",
 				by.y = "P.PID",
 				all = F
 			),
-			lot$Encounter,
+			lot$Encounters,
 			by.x = "O.EID",
 			by.y = "E.EID",
 			all = F
 		)
 
-	lot$ALL$AGE <- round( as.double( as.Date( lot$ALL$DATE ) - as.Date( lot$ALL$GEBURTSTAG ) ) / 365.25, 2 )
+	# add age column
+	lot$ALL$AGE <- round( as.double( as.Date( lot$ALL$DATE ) - as.Date( lot$ALL$DOB ) ) / 365.25, 2 )
 
-	# loesche evtl noch alle nicht vollstaendigen Datansaetze
-	# lot <- lapply( lot, na.omit )
 
+	# select only interresting columns
+	lot$ALL <- lot$ALL[ , c( "O.PID", "O.OID", "O.EID", "GVN.NAME", "FAM.NAME", "SEX", "AGE", "DIA", "SYS" ) ]
+
+	# return list of tables
 	lot
 }
-
-```
-### Ausführen eines Tests
-Aus dem Ordner **api**, indem sich das R-Skripte **fhi.R** befindet, startet man einen Test mit folgender Eingabe in die Kommandozeile:  
-```Rscript fhi.R -s specification-file -o output-directory -n number-of-bundles -S separator```  
-
-Hierbei sind:  
-  - ```specification-file```: der Name des R-Skriptes, das die Abfrage spezifiziert (in der Regel spec.R)  
-  - ```output-directory```: der Name des Verzeichnisses, in dem die Resultate gespeichert werden sollen (z.B. result).  
-  - ```number-of-bundles```: die maximale Anzahl an herunterzuladenden Bundles  
-  - ```separator```: a separator string for multiple entries in a resource  
-
-Es empfiehlt sich, eine Variable anzulegen, die den Pfad zur Datei **fhi.R** enthaelt, um so das Skript aus den Testverzeichnissen selbst ausfuehren zu koennen.
-```
-$ cd myGithubRepos/fhir2tables
-```  
-dort entweder
-```
-$ fhiR=$(realpath .)/fhi.R
-```  
-oder  
-```
-$ fhiR=$(pwd)/fhi.R
-```
-ausfuehren.  
-
-Jetzt kann das Script beispielsweise aus den Testverzeichnissen gestartet werden, soll das Ergebnisverzeichnis **result** heissen, das zu verwendende spec-file **spec.R** und wünscht man alle Bundles herunterzuladen, dann genügt sogar:
-```
-$ Rscript $fhiR
-```
-Andernfalls beispielsweise:  
-- das spec-file soll spec-medication-test.R heissen
-- das Ausgabeverzeichnis soll 'medications' heissen
-- bitte nur die ersten 5 Bundles downloaden!
-- als Separator fuer Mehrfacheintraege ' › '
-```
-$ Rscript $fhiR -s spec-medication-test.R -o medications -n 5 -S ' › '
 ```
 
-### Beispieltests
-Einige spec.R Dateien von vorbereiteten Testabfragen befinden sich im Ordner tests.   
-- MedicationStatement
-```
-.../fhir2tables/tests/MedicationStatement/$ Rscript $fhiR -s spec-medication-statement.R
-```
+The example above shows in essence:  
+1. how to download all Bundles from https://hapi.fhir.org/baseR4 containing all Blood Pressure Observations identified by loinc code 85354-9 with all related Patients and Encounters
+2. how to convert all Resources to R Data Frames
+3. and finally how to merge them into one R Data Frame
 
 
-### Erreichbare FHIR Server Endpoints  
+### FHIR Server Endpoints  
   - "http://demo.oridashi.com.au:8305/"  
   - "https://try.smilecdr.com:8000/"  
   - "https://vonk.fire.ly/R4/"  
-    - vonk scheint die besten Daten zu haben, doch nur wenige  
-  - "https://hapi.fhir.org/baseR4/"  
-    - hapi hat viele aber auch viele unsinnige Daten und scheint bereits ueberlastet zu sein
-	- ab 21:30 wird es besser  
+  - "https://hapi.fhir.org/baseR4/"
