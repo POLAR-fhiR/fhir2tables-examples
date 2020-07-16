@@ -15,7 +15,7 @@ $ ./run-example.sh
 ```
 
 ### Run your own Example
-1. Copy an example folder into the same path where the original example folder exists
+1. Copy an example folder into the same path where the original example folder is
 2. Open your copy of the file spec-example.R in a text editor
 3. Modify points 1 to 8 according to your requirements
 4. Start your copy of run-example.sh
@@ -32,7 +32,7 @@ $ ./run-example.sh
 
 
 ###
-# 1 Endpunkt des fhir r4 Servers
+# 1 endpoint of a fhir r4 server
 ###
 #endpoint <-  "https://vonk.fire.ly/R4/"
 endpoint <- "https://hapi.fhir.org/baseR4"
