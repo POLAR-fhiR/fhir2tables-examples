@@ -24,8 +24,6 @@ fhir_search_request <- paste0(
 	"code=http://loinc.org|85354-9",
 	"&_include=Observation:subject",
 	"&_include=Observation:encounter",
-	"&_format=xml",
-	"&_pretty=true",
 	"&_count=500" )
 
 
@@ -90,7 +88,7 @@ separator <- " | "
 # 7 brackets for multi entries
 ###
 # we doen't need brackets, because we don't add indices
-brackets <- NULL#c("<", ">")
+brackets <- c("<", ">")
 
 
 ###

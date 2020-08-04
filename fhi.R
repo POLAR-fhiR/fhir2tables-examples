@@ -16,14 +16,17 @@ cat( "--------------------------------------------------------------------------
 
 cat( "   - 0 download fhiR package if required...\n" )
 
-devtools::install_github( "POLAR-fhir/fhircrackr" )
-#install.packages( "fhircrackr" )
-
-library( "fhircrackr" )
-
 ###
 # https://polar-fhir.github.io/fhircrackr/
 ###
+
+# install v0.1.2
+devtools::install_github( "POLAR-fhir/fhircrackr" )
+
+# install v0.1.1
+#install.packages( "fhircrackr" )
+
+library( "fhircrackr" )
 
 arg <- commandArgs( T )
 
@@ -35,15 +38,19 @@ cat( "   - 1 load spec-file...\n" )
 
 source( spec_file )
 
-fsq <- fhircrackr::paste_paths( path1 = endpoint, path2 = fhir_search_request )
+fsr <- fhircrackr::paste_paths( path1 = endpoint, path2 = fhir_search_request )
 
 cat( "   - 2 get bundles...\n" )
 
-bundles <- fhircrackr::fhir_search( request = fsq, max_bundles = max_bundles, verbose = 2 )
+bundles <- fhircrackr::fhir_search( request = fsr, max_bundles = max_bundles, verbose = 2 )
 
 cat( "   - 3 convert bundles to data frames...\n" )
 
-list_of_tables <- fhircrackr::fhir_crack( bundles = bundles, design = design, sep = separator, brackets = brackets, add_indices = ! is.null( brackets ) )
+# bis version v0.1.2
+#list_of_tables <- fhircrackr::fhir_crack( bundles = bundles, design = design, sep = separator, brackets = brackets, add_indices = ! is.null( brackets ) )
+
+# ab version v0.1.2
+list_of_tables <- fhircrackr::fhir_crack( bundles = bundles, design = design, sep = separator, brackets = brackets )
 
 cat( "   - 4 post processing...\n" )
 
