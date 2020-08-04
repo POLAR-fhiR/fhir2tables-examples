@@ -88,7 +88,7 @@ separator <- " | "
 # 7 brackets for multi entries
 ###
 # we doen't need brackets, because we don't add indices
-brackets <- c("<", ">")
+brackets <- NULL#c("<", ">")
 
 
 ###
