@@ -42,31 +42,31 @@ design <- list(
 	Observations = list(
 		"//Observation",
 		list( 
-			O.OID = "id/@value",
-			O.PID = "subject/reference/@value",
-			O.EID = "encounter/reference/@value",
-			DIA   = "component[code/coding/code/@value='8462-4']/valueQuantity/value/@value", 
-			SYS   = "component[code/coding/code/@value='8480-6']/valueQuantity/value/@value",
-			DATE  = "effectiveDateTime/@value"
+			O.OID = "id",
+			O.PID = "subject/reference",
+			O.EID = "encounter/reference",
+			DIA   = "component[code/coding/code/@value='8462-4']/valueQuantity/value",
+			SYS   = "component[code/coding/code/@value='8480-6']/valueQuantity/value",
+			DATE  = "effectiveDateTime"
 		)
 	),
 	Encounters = list(
 		"//Encounter",
 		list(
-			E.EID = "id/@value",
-			E.PID = "subject/reference/@value",
-			START = "period/start/@value",
-			END   = "period/end/@value"
+			E.EID = "id",
+			E.PID = "subject/reference",
+			START = "period/start",
+			END   = "period/end"
 		)
 	),
 	Patients = list(
 		"//Patient",
 		list(
-			P.PID    = "id/@value", 
-			GVN.NAME = "name/given/@value", 
-			FAM.NAME = "name/family/@value",
-			SEX      = "gender/@value", 
-			DOB      = "birthDate/@value" 
+			P.PID    = "id",
+			GVN.NAME = "name/given",
+			FAM.NAME = "name/family",
+			SEX      = "gender",
+			DOB      = "birthDate"
 		)
 	)
 )
