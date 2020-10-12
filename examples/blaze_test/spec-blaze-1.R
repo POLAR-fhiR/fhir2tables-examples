@@ -31,22 +31,28 @@ fhir_search_request <- paste0(
 # 3 max_bundles
 ###
 # get all bunles available
-max_bundles <- 100
+max_bundles <- 10
 
 
 ###
 # 4 design
 ###
 # select what's interresting
+# design <- list(
+# 	Observations = list(
+# 		"//Observation",
+# 		list( 
+# 			O.OID = "id",
+# 			O.PID = "subject/reference",
+# 			O.EID = "encounter/reference",
+# 			DATE  = "effectiveDateTime"
+# 		)
+# 	)
+# )
+
 design <- list(
 	Observations = list(
-		"//Observation",
-		list( 
-			O.OID = "id",
-			O.PID = "subject/reference",
-			O.EID = "encounter/reference",
-			DATE  = "effectiveDateTime"
-		)
+		"//Observation"
 	)
 )
 
