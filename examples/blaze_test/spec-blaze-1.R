@@ -31,7 +31,7 @@ fhir_search_request <- paste0(
 # 3 max_bundles
 ###
 # get all bunles available
-max_bundles <- Inf
+max_bundles <- 100
 
 
 ###
@@ -44,6 +44,7 @@ design <- list(
 		list( 
 			O.OID = "id",
 			O.PID = "subject/reference",
+			O.EID = "encounter/reference",
 			DATE  = "effectiveDateTime"
 		)
 	)
