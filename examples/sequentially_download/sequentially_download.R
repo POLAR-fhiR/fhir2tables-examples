@@ -15,6 +15,7 @@ endpoint <- "https://blaze.life.uni-leipzig.de/fhir"
 
 fhir_search_request <- paste0(
 	"Observation?",
+	"code=72514-3&",
 	"_count=500" )
 
 fsr <- fhircrackr::paste_paths( path1 = endpoint, path2 = fhir_search_request )
@@ -38,7 +39,7 @@ post_processing <- function( lot ) {
 	lot
 }
 
-output_directory <- "results_fix_6h"
+output_directory <- "results_72514-3"
 
 if( ! dir.exists( output_directory ) ) {
 	
@@ -92,4 +93,3 @@ save(all, file = "all.RData")
 setwd( back )
 
 cat( "   fin\n" )
-
