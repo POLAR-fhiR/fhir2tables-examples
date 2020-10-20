@@ -10,19 +10,19 @@ rm( list = ls( ) )
 # devtools::install_github( "POLAR-fhir/fhircrackr" )
 install.packages("fhircrackr")
 
-library( "fhircrackr" )
+library("fhircrackr")
 
-endpoint <- "https://blaze.life.uni-leipzig.de/fhir"
+#endpoint <- "https://blaze.life.uni-leipzig.de/fhir"
+endpoint <- "https://hapi.fhir.org/baseR4"
 
 fhir_search_request <- paste0(
 	"Observation?",
 	"code=72514-3&",
 	"_count=500" )
 
-fsr <- fhircrackr::paste_paths( path1 = endpoint, path2 = fhir_search_request )
-#fsr <- "https://blaze.life.uni-leipzig.de/fhir/Observation?_count=500&__t=15065&__page-id=f46f38a7-d915-4e25-9bf3-52a0d8c0f9d1"
+fsr <- fhircrackr::paste_paths(path1 = endpoint, path2 = fhir_search_request)
 
-max_bundles <- 200
+max_bundles <- 2
 
 design <- list(
 	Observations = list(
@@ -34,39 +34,39 @@ separator <- " | "
 
 brackets <- c("<", ">")
 
-post_processing <- function( lot ) {
+post_processing <- function(lot) {
 
 	# return list of tables
 	lot
 }
 
-output_directory <- "results_72514-3"
+output_directory <- "results_72514-3-Blaze"
 
-if( ! dir.exists( output_directory ) ) {
+if( ! dir.exists(output_directory)) {
 	
-	dir.create( output_directory, recursive = T )
+	dir.create(output_directory, recursive = T)
 }
 
-back <- getwd( )
+back <- getwd()
 
-setwd( output_directory )
+setwd(output_directory)
 
 cnt <- 0
 
-while(! is.null(fsr)) {
+while(! is.null(fsr) && cnt < 5) {
 
-	bundles <- fhircrackr::fhir_search( request = fsr, max_bundles = max_bundles, verbose = 2 )
+	bundles <- fhircrackr::fhir_search(request = fsr, max_bundles = max_bundles, verbose = 2)
 
-	list_of_tables <- fhircrackr::fhir_crack( bundles = bundles, design = design, sep = separator, brackets = brackets )
+	list_of_tables <- fhircrackr::fhir_crack(bundles = bundles, design = design, sep = separator, brackets = brackets)
 
-	list_of_tables <- post_processing( list_of_tables )
+	list_of_tables <- post_processing(list_of_tables)
 
-	for( n in names( list_of_tables ) ) {
+	for(n in names(list_of_tables)) {
 
-		write.table( list_of_tables[[ n ]], file = paste0( n, "_", cnt, ".csv" ), na = "", sep = ";", dec = ".", row.names = F, quote = F )
+		write.table(list_of_tables[[n]], file = paste0(n, "_", cnt, ".csv"), na = "", sep = ";", dec = ".", row.names = F, quote = F)
 	}
 
-	save( list_of_tables, file = paste0("tables_", cnt, ".RData" ))
+	save(list_of_tables, file = paste0("tables_", cnt, ".RData"))
 
 	cnt <- cnt + 1
 
