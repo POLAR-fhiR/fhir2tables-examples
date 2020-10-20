@@ -7,7 +7,8 @@ rm( list = ls( ) )
 ###
 
 # install v0.1.2
-devtools::install_github( "POLAR-fhir/fhircrackr" )
+# devtools::install_github( "POLAR-fhir/fhircrackr" )
+install.packages("fhircrackr")
 
 library( "fhircrackr" )
 
