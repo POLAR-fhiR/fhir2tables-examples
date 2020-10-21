@@ -12,8 +12,8 @@ install.packages("fhircrackr")
 
 library("fhircrackr")
 
-#endpoint <- "https://blaze.life.uni-leipzig.de/fhir"
-endpoint <- "https://hapi.fhir.org/baseR4"
+endpoint <- "https://blaze.life.uni-leipzig.de/fhir"
+#endpoint <- "https://hapi.fhir.org/baseR4"
 
 fhir_search_request <- paste0(
 	"Observation?",

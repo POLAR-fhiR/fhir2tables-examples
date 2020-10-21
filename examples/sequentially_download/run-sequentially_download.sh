@@ -1,1 +1,0 @@
-Rscript sequentially_download.R
