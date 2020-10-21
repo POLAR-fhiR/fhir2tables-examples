@@ -13,6 +13,7 @@
 ###
 #endpoint <-  "https://vonk.fire.ly/R4/"
 endpoint <- "https://hapi.fhir.org/baseR4"
+#endpoint <- "https://blaze.life.uni-leipzig.de/fhir"
 
 
 ###
