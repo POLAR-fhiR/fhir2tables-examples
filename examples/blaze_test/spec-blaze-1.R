@@ -20,11 +20,11 @@ endpoint <- "https://blaze.life.uni-leipzig.de/fhir"
 ###
 # all blood pressure observations with their related patients and encounters
 fhir_search_request <- paste0(
-	"Observation?",
-#	"code=http://loinc.org|85354-9",
+	"Observation",
+	"?combo-code=http://loinc.org%7C8480-6",
 #	"&_include=Observation:subject",
 #	"&_include=Observation:encounter",
-	"_count=500" )
+	"&_count=500" )
 
 
 ###
